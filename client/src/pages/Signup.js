@@ -6,7 +6,6 @@ import TextInput from '../components/builtin/TextInput'
 
 const Login = () => {
   const dispatch = useDispatch()
-  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [password2, setPassword2] = useState('')
@@ -27,8 +26,8 @@ const Login = () => {
 
   const onSubmit = e => {
     e.preventDefault()
-    if (name && email && password && password2) {
-      dispatch(signupUser({ name, email, password, password2 }))
+    if (email && password && password2) {
+      dispatch(signupUser({ email, password, password2 }))
     }
   }
 
@@ -36,18 +35,6 @@ const Login = () => {
     <div className='container'>
       <form className='signup' onSubmit={onSubmit}>
         <h3 className='text-center'>Signup</h3>
-        <div className='form-group'>
-          <label>Name</label>
-          <TextInput
-            name='name'
-            type='name'
-            className='form-control'
-            id='InputEmail'
-            onChange={e => setName(e.target.value)}
-            value={name}
-            error={errors.name}
-          />
-        </div>
         <div className='form-group'>
           <label>Email</label>
           <TextInput
