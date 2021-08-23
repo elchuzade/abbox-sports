@@ -22,6 +22,7 @@ const Navbar = () => {
       <div className='collapse navbar-collapse' id='navbarSupportedContent'>
         <ul className='navbar-nav ml-auto'>
           {/* AUTH LINKS */}
+          {auth.isAuthenticated && <li className='nav-item'><Link to='/all-exercises' className='nav-link' href='#'>All Exercises</Link></li>}
           {auth.isAuthenticated && <li className='nav-item'><Link to='/profile' className='nav-link' href='#'>Profile</Link></li>}
           {auth.isAuthenticated && <li className='nav-item'><Link to='/' onClick={onLogout} className='nav-link' href='#'>Logout</Link></li>}
           {/* GUEST LINKS */}

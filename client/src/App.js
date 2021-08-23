@@ -19,6 +19,7 @@ import Signup from './pages/Signup'
 import NotFound from './pages/NotFound'
 import Landing from './pages/Landing'
 import Profile from './pages/Profile'
+import AllExercises from './pages/AllExercises'
 
 const checkToken = () => {
   if (localStorage.jwtToken) {
@@ -68,6 +69,7 @@ function App() {
           <Route exact path='/login' component={Login} />
           <Route exact path='/signup' component={Signup} />
           <PrivateRoute exact path='/profile' component={Profile} />
+          <PrivateRoute exact path='/all-exercises' component={AllExercises} />
           {/* <PrivateRoute exact path='/games/:id' component={({ match }) => (<Game id={match.params.id} />)} /> */}
           <Route path='*' component={NotFound} />
         </Switch>

@@ -71,6 +71,9 @@ const Profile = () => {
             </div>
           </div>
         }
+        <div className='row'>
+          My Exercises
+        </div>
       </div>
       <ConfirmModal
         opened={showDeleteModal}

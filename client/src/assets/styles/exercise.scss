@@ -1,0 +1,12 @@
+.exercise {
+  &-card {
+    border-radius: 1rem;
+  }
+  &-icon {
+    max-width: 128px;
+    border-radius: 1rem;
+  }
+  &-button {
+    border-radius: 0.5rem;
+  }
+}

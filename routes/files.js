@@ -12,17 +12,17 @@ aws.config.update({
 
 const s3 = new aws.S3()
 
-const uploadReceiptImage = multer({
+const uploadExerciseIcon = multer({
   storage: multerS3({
     s3: s3,
-    bucket: process.env.NODE_ENV === 'production' ? 'arti-main' : 'arti-staging',
+    bucket: process.env.NODE_ENV === 'production' ? 'abbox-sports' : 'abbox-sports',
     acl: 'public-read',
     metadata: function (req, file, cb) {
       cb(null, { fieldName: file.fieldname })
     },
     key: function (req, file, cb) {
       var newFileName = Date.now() + '-' + file.originalname
-      var fullPath = 'receiptImage/' + newFileName
+      var fullPath = 'exerciseIcon/' + newFileName
       cb(null, fullPath)
     }
   }),
@@ -32,33 +32,4 @@ const uploadReceiptImage = multer({
   }
 })
 
-function extractImageData (documentKey) {
-  return new Promise(resolve => {
-     var textract = new aws.Textract({
-       region: 'eu-central-1',
-       endpoint: `https://textract.eu-central-1.amazonaws.com/`,
-       accessKeyId: config.accessKeyId,
-       secretAccessKey: config.secretAccessKey
-     })
-     var params = {
-       Document: {
-         S3Object: {
-          Bucket: process.env.NODE_ENV === 'production' ? 'arti-main' : 'arti-staging',
-           Name: documentKey
-         }
-       },
-       FeatureTypes: ['RECEIPT']
-     }
- 
-     textract.analyzeDocument(params, (err, data) => {
-       if (err) {
-         return resolve(err)
-       } else {
-         resolve(data)
-       }
-     })
-   })
- }
-
-module.exports.extractImageData = extractImageData
-module.exports.uploadReceiptImage = uploadReceiptImage
+module.exports.uploadExerciseIcon = uploadExerciseIcon
