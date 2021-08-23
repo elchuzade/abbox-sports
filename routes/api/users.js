@@ -15,11 +15,14 @@ const Profile = require('../../models/Profile')
 // @desc Signup user
 // @access PUBLIC
 router.post('/signup', (req, res) => {
+  console.log('test')
   const { errors, isValid } = validateSignupInput(req.body)
   // Check for validation errors
   if (!isValid) {
     return res.status(400).json(errors)
   }
+
+  console.log('test')
 
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
@@ -77,6 +80,7 @@ router.post('/signup', (req, res) => {
 // @desc Login user / Returning JWT Token
 // @access PUBLIC
 router.post('/login', (req, res) => {
+  console.log('lgoin')
   const { errors, isValid } = validateLoginInput(req.body)
   // Check for validation errors
   if (!isValid) {

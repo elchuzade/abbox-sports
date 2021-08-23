@@ -4,7 +4,7 @@ const Messages = () => {
   return (
     <div>
       <div className='container'>
-        Landing Arti
+        Abbox Sports
       </div>
     </div>
   )
