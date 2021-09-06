@@ -47,7 +47,6 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req, r
   }
 })
 
-
 // @route PUT exercises/:id
 // @desc Update exercise
 // @access PRIVATE
@@ -157,6 +156,80 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req, re
   } catch (error) {
     console.log(error)
     errors.exercise = 'Exercises not found'
+    return res.status(404).json(errors)
+  }
+})
+
+router.post('/:id/participate', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const errors = {}
+  try {
+    const exercise = await Exercise.findById(req.params.id)
+    const profile = await Profile.findOne({ user: req.user.id })
+
+    if (exercise !== null && profile !== null) {
+      if (exercise.user.toString() !== req.user.id) {
+        errors.exercise = 'Unautorized'
+        return res.status(401).json(errors)
+      }
+      if (exercise.deleted) {
+        errors.exercise = 'Exercise is deleted'
+        return res.status(400).json(errors)
+      }
+
+      // remove current user from exercise participans and add again
+      exercise.participants = exercise.participants.filter(p => p !== req.user.id)
+      exercise.participants.push(req.user.id)
+
+      // remove current exercise from profile exercises and add again
+      profile.exercises = profile.exercises.filter(e => e !== exercise._id)
+      profile.exercises.push(exercise._id)
+      
+      // Save made updates
+      const updatedProfile = await profile.save()
+      const updatedExercise = await exercise.save()
+
+      // Return result of updated exercise
+      return res.status(200).json({ message: 'Participated in Exercise', status: 'success', data: { exercise: updatedExercise, profile: updatedProfile }})
+    }
+  } catch (error) {
+    console.log(error)
+    errors.exercise = 'Exercise not found'
+    return res.status(404).json(errors)
+  }
+})
+
+router.post('/:id/not-participate', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const errors = {}
+  try {
+    const exercise = await Exercise.findById(req.params.id)
+    const profile = await Profile.findOne({ user: req.user.id })
+
+    if (exercise !== null && profile !== null) {
+      if (exercise.user.toString() !== req.user.id) {
+        errors.exercise = 'Unautorized'
+        return res.status(401).json(errors)
+      }
+      if (exercise.deleted) {
+        errors.exercise = 'Exercise is deleted'
+        return res.status(400).json(errors)
+      }
+
+      // remove current user from exercise participans and add again
+      exercise.participants = exercise.participants.filter(p => p !== req.user.id)
+
+      // remove current exercise from profile exercises and add again
+      profile.exercises = profile.exercises.filter(e => e !== exercise._id)
+      
+      // Save made updates
+      const updatedProfile = await profile.save()
+      const updatedExercise = await exercise.save()
+
+      // Return result of updated exercise
+      return res.status(200).json({ message: 'Not Participated in Exercise', status: 'success', data: { exercise: updatedExercise, profile: updatedProfile }})
+    }
+  } catch (error) {
+    console.log(error)
+    errors.exercise = 'Exercise not found'
     return res.status(404).json(errors)
   }
 })

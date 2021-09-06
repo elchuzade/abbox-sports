@@ -11,6 +11,12 @@ const ProfileSchema = new Schema(
     name: {
       type: String
     },
+    exercises: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'exerecise'
+      }
+    ],
     deleted: {
       type: Boolean,
       required: true,

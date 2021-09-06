@@ -34,6 +34,13 @@ const ExerciseSchema = new Schema(
         type: String
       }
     },
+    participants: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+      }
+    ],
+    tags: [String],
     deleted: {
       type: Boolean,
       required: true,

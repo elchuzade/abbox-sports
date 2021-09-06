@@ -1,6 +1,6 @@
 import React from 'react'
 
-const ExerciseRow = exercise => {
+const ExerciseRow = ({ exercise }) => {
   return (
     <div className='card exercise-card'>
       <div className='row'>

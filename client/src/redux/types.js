@@ -17,3 +17,10 @@ export const DELETE_PROFILE = 'DELETE_PROFILE'
 
 /* ------ RECEIPTS ------ */
 export const UPLOAD_RECEIPT = 'UPLOAD_RECEIPT'
+
+/* ------ PROFILES ------ */
+export const GET_EXERCISE = 'GET_EXERCISE'
+export const GET_EXERCISES = 'GET_EXERCISES'
+export const ADD_EXERCISE = 'ADD_EXERCISE'
+export const UPDATE_EXERCISE = 'UPDATE_EXERCISE'
+export const DELETE_EXERCISE = 'DELETE_EXERCISE'
