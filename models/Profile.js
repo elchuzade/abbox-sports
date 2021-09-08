@@ -13,8 +13,23 @@ const ProfileSchema = new Schema(
     },
     exercises: [
       {
-        type: Schema.Types.ObjectId,
-        ref: 'exerecise'
+        exercise: {
+          type: Schema.Types.ObjectId,
+          ref: 'exercise',
+        },
+        sets: [
+          {
+            repetitions: {
+              type: Number
+            },
+            duration: {
+              type: Number
+            },
+            weight: {
+              type: Number
+            }
+          }
+        ],
       }
     ],
     deleted: {
