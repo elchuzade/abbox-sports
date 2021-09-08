@@ -19,17 +19,26 @@ const ProfileSchema = new Schema(
         },
         sets: [
           {
-            repetitions: {
-              type: Number
-            },
-            duration: {
-              type: Number
-            },
-            weight: {
-              type: Number
-            }
+            type: Schema.Types.ObjectId,
+            ref: 'exerciseSet',
           }
         ],
+        deleted: {
+          type: Boolean,
+          required: true,
+          default: false
+        },
+        joinedAt: {
+          type: Date,
+          required: true,
+          default: Date.now()
+        },
+        leftAt: {
+          type: Date
+        },
+        rejoinedAt: {
+          type: Date
+        }
       }
     ],
     deleted: {

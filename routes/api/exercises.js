@@ -179,13 +179,39 @@ router.post('/:id/participate', passport.authenticate('jwt', { session: false })
         return res.status(400).json(errors)
       }
 
-      // remove current user from exercise participans and add again
-      exercise.participants = exercise.participants.filter(p => p.toString() !== req.user.id)
-      exercise.participants.push(req.user.id)
+      let participantIndex = null;
+      for (let i = 0; i < exercise.participants.length; i++) {
+        if (exercise.participants[i].participant.toString() === req.user.id) {
+          // Already participating
+          participantIndex = i
+          break
+        }
+      }
+      if (participantIndex != null) {
+        // rejoining
+        exercise.participants[participantIndex].deleted = false
+        exercise.participants[participantIndex].rejoinedAt = Date.now()
+      } else {
+        // joining for the first time
+        exercise.participants.push({ participant: req.user.id })
+      }
 
-      // remove current exercise from profile exercises and add again
-      profile.exercises = profile.exercises.filter(e => e._id.toString() !== exercise._id.toString())
-      profile.exercises.push(exercise._id)
+      let exerciseIndex = null;
+      for (let i = 0; i < profile.exercises.length; i++) {
+        if (profile.exercises[i].exercise.toString() === req.params.id) {
+          // Already participating
+          exerciseIndex = i
+          break
+        }
+      }
+      if (exerciseIndex != null) {
+        // rejoining
+        profile.exercises[exerciseIndex].deleted = false
+        profile.exercises[participantIndex].rejoinedAt = Date.now()
+      } else {
+        // joining for the first time
+        profile.exercises.push({ exercise: req.params.id })
+      }
 
       // Save made updates
       const updatedProfile = await profile.save()
@@ -220,62 +246,27 @@ router.post('/:id/not-participate', passport.authenticate('jwt', { session: fals
         return res.status(400).json(errors)
       }
 
-      // remove current user from exercise participans and add again
-      exercise.participants = exercise.participants.filter(p => p.toString() !== req.user.id)
-
-      // remove current exercise from profile exercises and add again
-      profile.exercises = profile.exercises.filter(e => e._id.toString() !== exercise._id.toString())
-      
-      // Save made updates
-      const updatedProfile = await profile.save()
-      const updatedExercise = await exercise.save()
-
-      // Return result of updated exercise
-      return res.status(200).json({ message: 'Not Participated in Exercise', status: 'success', data: { exercise: updatedExercise, profile: updatedProfile }})
-    }
-  } catch (error) {
-    console.log(error)
-    errors.exercise = 'Exercise not found'
-    return res.status(404).json(errors)
-  }
-})
-
-// SETS
-
-// @route GET exercises/
-// @desc Get all exercises
-// @access PRIVATE
-router.post('/:id/sets', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  const errors = {}
-  // TODO: Add validation for number input for repetition, duration and weight
-  try {
-    const exercise = await Exercise.findById(req.params.id)
-    const profile = await Profile.findOne({ user: req.user.id })
-
-    if (exercise !== null && profile !== null) {
-      if (exercise.user.toString() !== req.user.id) {
-        errors.exercise = 'Unautorized'
-        return res.status(401).json(errors)
-      }
-      if (exercise.deleted) {
-        errors.exercise = 'Exercise is deleted'
-        return res.status(400).json(errors)
+      for (let i = 0; i < exercise.participants.length; i++) {
+        if (exercise.participants[i].participant.toString() === req.user.id) {
+          // Already participating
+          exercise.participants[i].deleted = true
+          exercise.participants[i].leftAt = Date.now()
+          break
+        }
       }
 
-      // Find exercise from profile exercises and add this set
       for (let i = 0; i < profile.exercises.length; i++) {
-        if (profile.exercises[i].exercise === req.params.id) {
-          // Found exercise
-          profile.exercises[i].sets.add({
-            repetitions: req.body.repetitions,
-            duration: req.body.duration,
-            weight: req.body.weight
-          })
+        if (profile.exercises[i].exercise.toString() === req.params.id) {
+          // Already participating
+          profile.exercises[i].deleted = true
+          profile.exercises[i].leftAt = Date.now()
+          break
         }
       }
 
       // Save made updates
       const updatedProfile = await profile.save()
+      const updatedExercise = await exercise.save()
 
       // Return result of updated exercise
       return res.status(200).json({ message: 'Not Participated in Exercise', status: 'success', data: { exercise: updatedExercise, profile: updatedProfile }})
