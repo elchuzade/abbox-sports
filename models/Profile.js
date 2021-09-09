@@ -11,6 +11,29 @@ const ProfileSchema = new Schema(
     name: {
       type: String
     },
+    icon: {
+      location: {
+        type: String
+      },
+      key: {
+        type: String
+      },
+      bucket: {
+        type: String
+      },
+      originalname: {
+        type: String
+      },
+      mimetype: {
+        type: String
+      },
+      size: {
+        type: Number
+      },
+      fieldName: {
+        type: String
+      }
+    },
     exercises: [
       {
         exercise: {

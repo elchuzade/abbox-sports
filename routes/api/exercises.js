@@ -331,7 +331,7 @@ router.post('/:id/icon', passport.authenticate('jwt', { session: false }), async
 
               exercise
                 .save()
-                .then(savedGame => res.status(200).json({ message: 'Uploaded Exercise Icon', status: 'success', data: savedGame }))
+                .then(savedExercise => res.status(200).json({ message: 'Uploaded Exercise Icon', status: 'success', data: savedExercise }))
                 .catch(err => {
                   console.log(err)
                   errors.exercise = 'Could not upload Exercise Icon'
@@ -363,7 +363,7 @@ router.post('/:id/icon', passport.authenticate('jwt', { session: false }), async
 
           exercise
             .save()
-            .then(savedGame => res.status(200).json({ message: 'Uploaded Exercise Icon', status: 'success', data: savedGame }))
+            .then(savedExercise => res.status(200).json({ message: 'Uploaded Exercise Icon', status: 'success', data: savedExercise }))
             .catch(err => {
               console.log(err)
               errors.exercise = 'Could not upload Exercise Icon'

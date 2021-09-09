@@ -32,4 +32,25 @@ const uploadExerciseIcon = multer({
   }
 })
 
+const uploadProfileIcon = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: process.env.NODE_ENV === 'production' ? 'abbox-sports' : 'abbox-sports',
+    acl: 'public-read',
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname })
+    },
+    key: function (req, file, cb) {
+      var newFileName = Date.now() + '-' + file.originalname
+      var fullPath = 'profileIcon/' + newFileName
+      cb(null, fullPath)
+    }
+  }),
+  limits: { fileSize: 5000000 },
+  fileFilter: function (req, file, cb) {
+    checkImageFileType(file, cb)
+  }
+})
+
 module.exports.uploadExerciseIcon = uploadExerciseIcon
+module.exports.uploadProfileIcon = uploadProfileIcon
