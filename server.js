@@ -34,7 +34,7 @@ require('./config/passport')(passport)
 app.use('/api/v1/users', users)
 app.use('/api/v1/profiles', profiles)
 app.use('/api/v1/exercises', exercises)
-app.use('/api/v1/exercises/:exerciseId/sets', exerciseSets)
+app.use('/api/v1/exercises/sets', exerciseSets)
 
 // Serve static assets if in production (Heroku stuff)
 if (process.env.NODE_ENV === 'production') {

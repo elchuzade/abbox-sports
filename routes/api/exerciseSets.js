@@ -2,32 +2,39 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 
-const Exercise = require('../../models/Exercise')
+// Load Input Validation
+const validateExerciseSetInput = require('../../validation/exerciseSet')
+
 const Profile = require('../../models/Profile')
 const ExerciseSet = require('../../models/ExerciseSet')
 
-
-// @route GET exercises/:id/sets
+// @route GET exercises/sets/:exerciseId
 // @desc Get all exercise sets
 // @access PRIVATE
-router.get('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.get('/:exerciseId', passport.authenticate('jwt', { session: false }), async (req, res) => {
   const errors = {}
   try {
     const profile = await Profile.findOne({ user: req.user.id })
 
-    let sets = []
-
     if (profile !== null) {
-      if (exercise.user.toString() !== req.user.id) {
-        errors.exercise = 'Unautorized'
-        return res.status(401).json(errors)
+      let sets = []
+
+      if (!profile.exercises.some(e => e.exercise.toString() === req.params.exerciseId)) {
+        errors.exercise = 'Exercise not found'
+        return res.status(404).json(errors)
       }
 
       // Find exercise from profile exercises and add this set
       for (let i = 0; i < profile.exercises.length; i++) {
-        if (profile.exercises[i].exercise === req.params.id) {
+        if (profile.exercises[i].exercise.toString() === req.params.exerciseId) {
+          if (profile.exercises[i].deleted) {
+            errors.exercise = 'Exercise is deleted'
+            return res.status(400).json(errors)
+          }
           // Found exercise
-          sets = profile.exercises[i].exercise.sets
+
+          sets = await ExerciseSet.find({ _id: { $in: profile.exercises[i].sets } })
+          break
         }
       }
 
@@ -41,25 +48,33 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req, re
   }
 })
 
-// @route POST exercises/:exerciseId/sets
+// @route POST exercises/sets/:exerciseId
 // @desc Add exercise set
 // @access PRIVATE
-router.post('/', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  const errors = {}
+router.post('/:exerciseId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const { errors, isValid } = validateExerciseSetInput(req.body)
+  // Check for validation errors
+  if (!isValid) {
+    return res.status(400).json(errors)
+  }
   try {
     const profile = await Profile.findOne({ user: req.user.id })
 
     if (profile !== null) {
-      if (exercise.user.toString() !== req.user.id) {
-        errors.exercise = 'Unautorized'
-        return res.status(401).json(errors)
+      if (!profile.exercises.some(e => e.exercise.toString() === req.params.exerciseId)) {
+        errors.exercise = 'Exercise not found'
+        return res.status(404).json(errors)
       }
 
       // Find exercise from profile exercises and add this set
       for (let i = 0; i < profile.exercises.length; i++) {
-        if (profile.exercises[i].exercise === req.params.id) {
+        if (profile.exercises[i].exercise.toString() === req.params.exerciseId) {
+          if (profile.exercises[i].deleted) {
+            errors.exercise = 'Exercise is deleted'
+            return res.status(400).json(errors)
+          }
           // Found exercise
-          let newExercise = new ExerciseSet({
+          let newExerciseSet = new ExerciseSet({
             user: req.user.id,
             exercise: req.params.exerciseId,
             repetitions: req.body.repetitions,
@@ -67,10 +82,9 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req, r
             weight: req.body.weight
           })
 
-          const savedExercise = await newExercise.save()
-
-          profile.exercises[i].sets.add(savedExercise)
-          return
+          const savedExercise = await newExerciseSet.save()
+          profile.exercises[i].sets.push(savedExercise._id)
+          break
         }
       }
 
@@ -78,7 +92,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req, r
       const updatedProfile = await profile.save()
 
       // Return result of updated exercise
-      return res.status(200).json({ message: 'Not Participated in Exercise', status: 'success', data: { exercise: updatedExercise, profile: updatedProfile }})
+      return res.status(200).json({ message: 'Added new Set to Exercise', status: 'success', data: updatedProfile})
     }
   } catch (error) {
     console.log(error)
@@ -87,45 +101,37 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req, r
   }
 })
 
-// @route PUT exercises/:id/sets/:setId
+// @route PUT exercises/sets/:exerciseId/:setId
 // @desc Update exercise set
 // @access PRIVATE
-router.put('/:id/sets/:setId', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  const errors = {}
+router.put('/:exerciseId/:setId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const { errors, isValid } = validateExerciseSetInput(req.body)
+  // Check for validation errors
+  if (!isValid) {
+    return res.status(400).json(errors)
+  }
   try {
-    const exercise = await Exercise.findById(req.params.id)
-    const profile = await Profile.findOne({ user: req.user.id })
+    const exerciseSet = await ExerciseSet.findById(req.params.setId)
 
-    if (exercise !== null && profile !== null) {
-      if (exercise.user.toString() !== req.user.id) {
-        errors.exercise = 'Unautorized'
+    if (exerciseSet !== null) {
+      if (exerciseSet.user.toString() !== req.user.id) {
+        errors.exerciseSet = 'Unauthorized'
         return res.status(401).json(errors)
       }
-      if (exercise.deleted) {
-        errors.exercise = 'Exercise is deleted'
+      if (exerciseSet.deleted) {
+        errors.exerciseSet = 'Exercise set is deleted'
         return res.status(400).json(errors)
       }
+      
+      exerciseSet.duration = req.body.duration
+      exerciseSet.repetitions = req.body.repetitions
+      exerciseSet.weight = req.body.weight
 
-      // Find exercise from profile exercises and add this set
-      for (let i = 0; i < profile.exercises.length; i++) {
-        if (profile.exercises[i].exercise === req.params.id) {
-          // Found exercise
-          for (let j = 0; j < profile.exercises[i].exercises.sets.length; j++) {
-            if (profile.exercises[i].exercise.sets[j]._id.toString() === req.params.setId) {
-              profile.exercises[i].exercise.sets[j].repetitions = req.body.repetitions
-              profile.exercises[i].exercise.sets[j].duration = req.body.duration
-              profile.exercises[i].exercise.sets[j].weight = req.body.weight
-            }
-          }
-        }
-      }
+      updatedExerciseSet = await exerciseSet.save()
+      
+      // Return result of updated exercise
+      return res.status(200).json({ message: 'Updated exercise set', status: 'success', data: updatedExerciseSet })
     }
-
-    // Save made updates
-    const updatedProfile = await profile.save()
-
-    // Return result of updated exercise
-    return res.status(200).json({ message: 'Not Participated in Exercise', status: 'success', data: { exercise: updatedExercise, profile: updatedProfile }})
   } catch (error) {
     console.log(error)
     errors.exercise = 'Exercise not found'
@@ -133,45 +139,32 @@ router.put('/:id/sets/:setId', passport.authenticate('jwt', { session: false }),
   }
 })
 
-// @route DELETE exercises/:id/sets/:setId
+// @route DELETE exercises/sets/:exerciseId/:setId
 // @desc Delete exercise set
 // @access PRIVATE
-router.delete('/:id/sets/:setId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.delete('/:exerciseId/:setId', passport.authenticate('jwt', { session: false }), async (req, res) => {
   const errors = {}
   try {
-    const exercise = await Exercise.findById(req.params.id)
-    const profile = await Profile.findOne({ user: req.user.id })
+    const exerciseSet = await ExerciseSet.findById(req.params.setId)
 
-    if (exercise !== null && profile !== null) {
-      if (exercise.user.toString() !== req.user.id) {
-        errors.exercise = 'Unautorized'
+    if (exerciseSet !== null) {
+      if (exerciseSet.user.toString() !== req.user.id) {
+        errors.exerciseSet = 'Unauthorized'
         return res.status(401).json(errors)
       }
-      if (exercise.deleted) {
-        errors.exercise = 'Exercise is deleted'
-        return res.status(400).json(errors)
-      }
+      
+      exerciseSet.deleted = true
 
-      // Find exercise from profile exercises and add this set
-      for (let i = 0; i < profile.exercises.length; i++) {
-        if (profile.exercises[i].exercise === req.params.id) {
-          // Found exercise
-          profile.exercises[i].exercise.sets.fiter(s => s._id.toString() !== req.params.setId)
-        }
-      }
+      deletedExerciseSet = await exerciseSet.save()
+      
+      // Return result of updated exercise
+      return res.status(200).json({ message: 'Deleted exercise set', status: 'success', data: deletedExerciseSet })
     }
-
-    // Save made updates
-    const updatedProfile = await profile.save()
-
-    // Return result of updated exercise
-    return res.status(200).json({ message: 'Not Participated in Exercise', status: 'success', data: { exercise: updatedExercise, profile: updatedProfile }})
   } catch (error) {
     console.log(error)
     errors.exercise = 'Exercise not found'
     return res.status(404).json(errors)
   }
 })
-
 
 module.exports = router
