@@ -21,7 +21,6 @@ import NotFound from './pages/NotFound'
 import Landing from './pages/Landing'
 import Profile from './pages/Profile'
 import Exercises from './pages/exercises/Exercises'
-import Game from './pages/Game'
 
 const checkToken = () => {
   if (localStorage.jwtToken) {
@@ -70,7 +69,6 @@ const App: React.FC = () => {
         <Route exact path='/signup' component={Signup} />
         <PrivateRoute exact path='/profile' component={Profile} />
         <PrivateRoute exact path='/exercises' component={Exercises} />
-        <PrivateRoute exact path='/game' component={Game} />
         <Route path='*' component={NotFound} />
       </Switch>
       <ToastContainer />

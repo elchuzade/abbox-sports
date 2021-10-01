@@ -1,9 +1,23 @@
 @import './constants.css';
 
 .exercise-card {
-  height: 40px;
+  height: 60px;
   border: 1px solid var(--theme-border);
   margin: 0.5rem;
   border-radius: 1rem;
   background: var(--theme-main-background-dark);
+}
+
+.exercise-card-left {
+  width: 80%;
+}
+
+.exercise-card-left span {
+  width: 100%;
+  text-align: left;
+}
+
+.exercise-card-right {
+  width: 20%;
+  text-align: right;
 }

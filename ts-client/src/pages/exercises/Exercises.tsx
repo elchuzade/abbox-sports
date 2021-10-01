@@ -43,7 +43,7 @@ const Exercises: React.FC<Props> = () => {
         <h5>My Exercises</h5>
         {exercises.map((e, i) => (
           <div key={i} className='exercise'>
-            <ExerciseCard name={e.name} />
+            <ExerciseCard exercise={e} tags={['weight', 'duration', 'repetitions']} />
           </div>
         ))}
       </div>

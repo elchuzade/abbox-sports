@@ -57,5 +57,18 @@ interface NewExercise {
 interface Exercise {
   _id: string;
   name: string;
-  tags?: String[];
+  tags?: string[];
+}
+
+interface NewExerciseSet {
+  weight?: number;
+  duration?: number;
+  repetitions?: number;
+}
+
+interface ExerciseSet {
+  _id: string;
+  weight?: number;
+  duration?: number;
+  repetitions?: number;
 }

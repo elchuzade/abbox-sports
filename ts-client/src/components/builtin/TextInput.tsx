@@ -4,7 +4,7 @@ import classnames from 'classnames'
 interface Props {
   name: string;
   placeholder?: string;
-  value: string;
+  value: string | number;
   label?: string;
   error?: string;
   info?: string;
