@@ -1,0 +1,9 @@
+@import './constants.css';
+
+.exercise-card {
+  height: 40px;
+  border: 1px solid var(--theme-border);
+  margin: 0.5rem;
+  border-radius: 1rem;
+  background: var(--theme-main-background-dark);
+}

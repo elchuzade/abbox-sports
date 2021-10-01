@@ -1,0 +1,34 @@
+@import './constants.css';
+
+.button-small {
+  height: 2rem;
+  width: 2rem;
+}
+
+.button-theme {
+  background-color: var(--theme-main-button);
+}
+
+.button-theme-round {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  border-radius: 50%;
+  width: 3rem;
+  height: 3rem;
+  background: var(--theme-main-button);
+}
+
+.button-theme-long {
+  width: 6rem;
+  height: 2.4rem;
+  border-radius: 1rem;
+}
+
+.button-unstyled {
+  border: none;
+}
+
+.button-unstyled:focus {
+  outline: none;
+}

@@ -40,6 +40,29 @@ const ProfileSchema = new Schema(
           type: Schema.Types.ObjectId,
           ref: 'exercise',
         },
+        icon: {
+          location: {
+            type: String
+          },
+          key: {
+            type: String
+          },
+          bucket: {
+            type: String
+          },
+          originalname: {
+            type: String
+          },
+          mimetype: {
+            type: String
+          },
+          size: {
+            type: Number
+          },
+          fieldName: {
+            type: String
+          }
+        },
         sets: [
           {
             type: Schema.Types.ObjectId,

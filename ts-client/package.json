@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "ts-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,6 +10,7 @@
     "@types/node": "^12.20.26",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
+    "@types/react-router-dom": "^5.3.0",
     "axios": "^0.21.4",
     "jwt-decode": "^3.1.2",
     "react": "^17.0.2",
@@ -47,8 +48,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5001",
-  "devDependencies": {
-    "@types/react-router-dom": "^5.3.0"
-  }
+  "proxy": "http://localhost:5001"
 }

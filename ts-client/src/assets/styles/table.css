@@ -1,0 +1,6 @@
+@import './constants.css';
+
+.table-horizontal {
+  overflow: scroll;
+  width: 100%;
+}

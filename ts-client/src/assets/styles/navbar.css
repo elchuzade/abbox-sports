@@ -1,0 +1,40 @@
+@import './constants.css';
+
+.navbar {
+  background: var(--theme-main-background-dark);
+  height: 50px;
+  z-index: 1;
+}
+
+.navbar-menu {
+  display: flex;
+}
+
+.navbar-menu-item a {
+  margin: 1rem;  
+}
+
+.navbar-button {
+  background: var(--theme-main-background-dark);
+}
+
+.navbar-button-close {
+  position: fixed;
+  right: 0;
+  top: 0;
+  padding: 0.75rem 1.5rem;
+}
+
+.navbar-pop {
+  display: flex;
+  height: 100%;
+  min-width: 100%;
+  position: fixed;
+  background: var(--theme-main-background-dark);
+  right: 0;
+  top: 0;
+}
+
+.navbar-menu-item-opened {
+  margin: 2rem 0;
+}

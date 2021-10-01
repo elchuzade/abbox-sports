@@ -13,10 +13,22 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case GET_EXERCISE:
-    case ADD_EXERCISE:
     case UPDATE_EXERCISE:
+      return {
+        ...state,
+        exercises: [...state.exercises(e => e._id === action.payload._id ? action.payload : e)]
+      }
+    case ADD_EXERCISE:
+      return {
+        ...state,
+        exercises: [action.payload, ...state.exercises]
+      }
     case DELETE_EXERCISE:
+      return {
+        ...state,
+        exercises: [...state.exercises.filter(e => e._id !== action.payload._id)]
+      }
+    case GET_EXERCISE:
       return {
         ...state,
         exercise: action.payload
