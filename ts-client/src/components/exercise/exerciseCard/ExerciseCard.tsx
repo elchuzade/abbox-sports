@@ -19,7 +19,7 @@ const ExerciseCard: React.FC<Props> = ({ exercise, tags }) => {
   return (
     <div className='exercise-card d-flex'>
       <Link to={`/exercises/${exercise._id}`} className='exercise-card-left pt-1 pl-1 link-unstyled'>
-        <span className='ml-2 d-block'>{exercise.name}</span>
+        <span className='ml-2 d-block'>{exercise.name} ({exercise.exerciseSets?.length})</span>
         <p className='text-left mb-0 ml-3'>
           {tags?.map((t, i) => <small key={i} className='exercise-card-tag'><i>{t}, </i></small>)}
         </p>

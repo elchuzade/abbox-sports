@@ -3,7 +3,8 @@ import {
   GET_EXERCISES,
   ADD_EXERCISE,
   UPDATE_EXERCISE,
-  DELETE_EXERCISE
+  DELETE_EXERCISE,
+  ADD_EXERCISE_SET,
 } from '../dispatchTypes'
 
 const initialState: ExerciseRedux = {
@@ -37,6 +38,11 @@ export default (state = initialState, action: any) => {
       return {
         ...state,
         exercises: action.payload
+      }
+    case ADD_EXERCISE_SET:
+      return {
+        ...state,
+        exercises: [...state.exercises.map(e => e._id === action.payload.exercise._id ? action.payload.exercise : e)]
       }
     default:
       return state

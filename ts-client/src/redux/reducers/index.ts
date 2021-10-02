@@ -8,5 +8,5 @@ export default combineReducers({
   auth: authReducer,
   response: responseReducer,
   profile: profileReducer,
-  exercise: exerciseReducer,
+  exercise: exerciseReducer
 })

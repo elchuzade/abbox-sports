@@ -59,6 +59,7 @@ interface Exercise {
   _id: string;
   name: string;
   tags?: string[];
+  exerciseSets?: string[];
 }
 
 interface NewExerciseSet {
