@@ -3,6 +3,7 @@ import { Modal, ModalBody, Row, Col, Button } from 'reactstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import TextInput from '../../builtin/TextInput'
 import { addExerciseSet, updateExerciseSet } from '../../../redux/actions/exerciseSetActions'
+import removeLeadingZero from '../../../utils/removeLeadingZero'
 
 interface Props {
   exercise: Exercise;
@@ -22,9 +23,9 @@ const ExerciseSetModal: React.FC<Props> = ({
   const dispatch = useDispatch()
   const [errors, setErrors] = useState<any>({})
   const [loading, setLoading] = useState<boolean>(false)
-  const [weight, setWeight] = useState<number>(0)
-  const [duration, setDuration] = useState<number>(0)
-  const [repetitions, setRepetitions] = useState<number>(0)
+  const [weight, setWeight] = useState<number>()
+  const [duration, setDuration] = useState<number>()
+  const [repetitions, setRepetitions] = useState<number>()
   const [id, setId] = useState<string>('')
 
   const responseRedux = useSelector((state: State) => state.response)
@@ -99,8 +100,8 @@ const ExerciseSetModal: React.FC<Props> = ({
               type='number'
               name='weight'
               placeholder='weight'
-              value={weight}
-              onChange={e => setWeight(Number(e.target.value))}
+              value={weight || ''}
+              onChange={e => setWeight(removeLeadingZero(e.target.value))}
               error={errors.weight}
               prefix={<i className='fas fa-dumbbell' />}
             />
@@ -110,8 +111,8 @@ const ExerciseSetModal: React.FC<Props> = ({
               type='number'
               name='duration'
               placeholder='duration'
-              value={duration}
-              onChange={e => setDuration(Number(e.target.value))}
+              value={duration || ''}
+              onChange={e => setDuration(removeLeadingZero(e.target.value))}
               error={errors.duration}
               prefix={<i className='fas fa-clock' />}
             />
@@ -121,8 +122,8 @@ const ExerciseSetModal: React.FC<Props> = ({
               type='number'
               name='repetitions'
               placeholder='repetitions'
-              value={repetitions}
-              onChange={e => setRepetitions(Number(e.target.value))}
+              value={repetitions || ''}
+              onChange={e => setRepetitions(removeLeadingZero(e.target.value))}
               error={errors.repetitions}
               prefix={<i className='fas fa-calculator' />}
             />
