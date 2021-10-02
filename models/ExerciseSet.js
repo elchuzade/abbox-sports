@@ -11,6 +11,7 @@ const ExerciseSetSchema = new Schema(
     exercise: {
       type: Schema.Types.ObjectId,
       ref: 'exercise',
+      required: true
     },
     repetitions: {
       type: Number

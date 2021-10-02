@@ -6,7 +6,7 @@ import className from 'classnames'
 
 const Navbar = () => {
   const dispatch = useDispatch()
-  const [showNavbarPop, setShowNavbarPop] = useState<Boolean>(false)
+  const [showNavbarPop, setShowNavbarPop] = useState<boolean>(false)
 
   const auth = useSelector((state: State) => state.auth)
 

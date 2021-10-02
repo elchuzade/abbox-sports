@@ -1,20 +1,20 @@
 const Validator = require('validator')
 const isEmpty = require('./is-empty')
 
-module.exports = function validateExerciseSetInput (data) {
+module.exports = function validateExerciseSetInput(data) {
   let errors = {}
 
   data.repetitions = !isEmpty(data.repetitions) ? data.repetitions : ''
   data.duration = !isEmpty(data.duration) ? data.duration : ''
   data.weight = !isEmpty(data.weight) ? data.weight : ''
 
-  if (data.repetitions && !Validator.isInt(data.repetitions)) {
+  if (data.repetitions && !Validator.isInt(data.repetitions.toString())) {
     errors.repetitions = 'Repetitions must be number'
   }
-  if (data.duration && !Validator.isInt(data.duration)) {
+  if (data.duration && !Validator.isInt(data.duration.toString())) {
     errors.duration = 'Duration must be number'
   }
-  if (data.weight && !Validator.isInt(data.weight)) {
+  if (data.weight && !Validator.isInt(data.weight.toString())) {
     errors.weight = 'Weight must be number'
   }
 

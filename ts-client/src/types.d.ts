@@ -52,6 +52,7 @@ interface Profile {
 
 interface NewExercise {
   name: string;
+  tags: string[];
 }
 
 interface Exercise {

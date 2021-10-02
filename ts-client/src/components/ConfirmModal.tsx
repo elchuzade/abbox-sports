@@ -17,15 +17,8 @@ const ConfirmModal: React.FC<Props> = ({
   const dispatch = useDispatch()
   const [errors, setErrors] = useState<any>({})
   const [loading, setLoading] = useState<boolean>(false)
-  const [id, setId] = useState<string>('')
 
   const responseRedux = useSelector((state: State) => state.response)
-
-  useEffect(() => {
-    if (exercise) {
-      setId(exercise._id)
-    }
-  }, [exercise])
 
   useEffect(() => {
     // If there are any errors in redux set them to the input field
@@ -43,7 +36,9 @@ const ConfirmModal: React.FC<Props> = ({
   }, [responseRedux])
 
   const onDeleteExercise = () => {
-    dispatch(deleteExercise(id))
+    if (exercise) {
+      dispatch(deleteExercise(exercise))
+    }
   }
 
   const onCloseModal = () => {

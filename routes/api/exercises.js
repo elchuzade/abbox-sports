@@ -5,6 +5,7 @@ const passport = require('passport')
 // Load Input Validation
 const validateExerciseInput = require('../../validation/exercise')
 
+const Profile = require('../../models/Profile')
 const Exercise = require('../../models/Exercise')
 
 // AWS IMAGES
@@ -31,15 +32,22 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req, r
     return res.status(400).json(errors)
   }
   try {
+
+    const profile = await Profile.findOne({ user: req.user.id })
     // Create a new exercise
     const exercise = new Exercise({
       user: req.user.id,
-      name: req.body.name
+      name: req.body.name,
+      tags: req.body.tags
     })
     // Save created exercise
     const createdExercise = await exercise.save()
+
+    profile.exercises.unshift(createdExercise._id)
+    const savedProfile = await profile.save()
+
     // Return result of updated exercise
-    return res.status(200).json({ message: 'Created Exercise', status: 'success', data: createdExercise })
+    return res.status(200).json({ message: 'Created Exercise', status: 'success', data: { exercise: createdExercise, profile: savedProfile } })
   } catch (error) {
     console.log(error)
     errors.exercise = 'Exercise not created'
@@ -119,7 +127,7 @@ router.delete('/:id', passport.authenticate('jwt', { session: false }), async (r
 router.get('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
   const errors = {}
   try {
-    const exercise = await Exercise.findById(req.params.id)
+    const exercise = await Exercise.findById(req.params.id).populate('exerciseSets')
 
     if (exercise !== null) {
       if (exercise.user.toString() !== req.user.id) {
@@ -130,7 +138,7 @@ router.get('/:id', passport.authenticate('jwt', { session: false }), async (req,
         errors.exercise = 'Exercise is deleted'
         return res.status(401).json(errors)
       }
-      
+
       // Return found exercise
       return res.status(200).json({ message: 'Found Exercise', status: 'success', data: exercise })
     }
@@ -149,131 +157,13 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req, re
   try {
     const exercises = await Exercise.find({ deleted: false })
 
-    if (exercises !== null) {      
+    if (exercises !== null) {
       // Return found exercise
       return res.status(200).json({ message: 'Found Exercises', status: 'success', data: exercises })
     }
   } catch (error) {
     console.log(error)
     errors.exercise = 'Exercises not found'
-    return res.status(404).json(errors)
-  }
-})
-
-// @route POST exercises/:id/participate
-// @desc Follow the exercise
-// @access PRIVATE
-router.post('/:id/participate', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  const errors = {}
-  try {
-    const exercise = await Exercise.findById(req.params.id)
-    const profile = await Profile.findOne({ user: req.user.id })
-
-    if (exercise !== null && profile !== null) {
-      if (exercise.user.toString() !== req.user.id) {
-        errors.exercise = 'Unautorized'
-        return res.status(401).json(errors)
-      }
-      if (exercise.deleted) {
-        errors.exercise = 'Exercise is deleted'
-        return res.status(400).json(errors)
-      }
-
-      let participantIndex = null;
-      for (let i = 0; i < exercise.participants.length; i++) {
-        if (exercise.participants[i].participant.toString() === req.user.id) {
-          // Already participating
-          participantIndex = i
-          break
-        }
-      }
-      if (participantIndex != null) {
-        // rejoining
-        exercise.participants[participantIndex].deleted = false
-        exercise.participants[participantIndex].rejoinedAt = Date.now()
-      } else {
-        // joining for the first time
-        exercise.participants.push({ participant: req.user.id })
-      }
-
-      let exerciseIndex = null;
-      for (let i = 0; i < profile.exercises.length; i++) {
-        if (profile.exercises[i].exercise.toString() === req.params.id) {
-          // Already participating
-          exerciseIndex = i
-          break
-        }
-      }
-      if (exerciseIndex != null) {
-        // rejoining
-        profile.exercises[exerciseIndex].deleted = false
-        profile.exercises[participantIndex].rejoinedAt = Date.now()
-      } else {
-        // joining for the first time
-        profile.exercises.push({ exercise: req.params.id })
-      }
-
-      // Save made updates
-      const updatedProfile = await profile.save()
-      const updatedExercise = await exercise.save()
-
-      // Return result of updated exercise
-      return res.status(200).json({ message: 'Participated in Exercise', status: 'success', data: { exercise: updatedExercise, profile: updatedProfile }})
-    }
-  } catch (error) {
-    console.log(error)
-    errors.exercise = 'Exercise not found'
-    return res.status(404).json(errors)
-  }
-})
-
-// @route POST exercises/:id/not-participate
-// @desc Unfollow the exercise
-// @access PRIVATE
-router.post('/:id/not-participate', passport.authenticate('jwt', { session: false }), async (req, res) => {
-  const errors = {}
-  try {
-    const exercise = await Exercise.findById(req.params.id)
-    const profile = await Profile.findOne({ user: req.user.id })
-
-    if (exercise !== null && profile !== null) {
-      if (exercise.user.toString() !== req.user.id) {
-        errors.exercise = 'Unautorized'
-        return res.status(401).json(errors)
-      }
-      if (exercise.deleted) {
-        errors.exercise = 'Exercise is deleted'
-        return res.status(400).json(errors)
-      }
-
-      for (let i = 0; i < exercise.participants.length; i++) {
-        if (exercise.participants[i].participant.toString() === req.user.id) {
-          // Already participating
-          exercise.participants[i].deleted = true
-          exercise.participants[i].leftAt = Date.now()
-          break
-        }
-      }
-
-      for (let i = 0; i < profile.exercises.length; i++) {
-        if (profile.exercises[i].exercise.toString() === req.params.id) {
-          // Already participating
-          profile.exercises[i].deleted = true
-          profile.exercises[i].leftAt = Date.now()
-          break
-        }
-      }
-
-      // Save made updates
-      const updatedProfile = await profile.save()
-      const updatedExercise = await exercise.save()
-
-      // Return result of updated exercise
-      return res.status(200).json({ message: 'Not Participated in Exercise', status: 'success', data: { exercise: updatedExercise, profile: updatedProfile }})
-    }
-  } catch (error) {
-    console.log(error)
-    errors.exercise = 'Exercise not found'
     return res.status(404).json(errors)
   }
 })
@@ -297,7 +187,6 @@ router.post('/:id/icon', passport.authenticate('jwt', { session: false }), async
         errors.exercise = 'Exercise is deleted'
         return res.status(401).json(errors)
       }
-      // Check if the exercise.icon already exists? delete and make a new one
       if (exercise.icon && exercise.icon.key) {
         const params = {
           Bucket: exercise.icon.bucket,
@@ -309,6 +198,7 @@ router.post('/:id/icon', passport.authenticate('jwt', { session: false }), async
           if (err) {
             console.log(err)
           } else {
+            // Check if the exercise.icon already exists? delete and make a new one
             // Create Exercise Icon
             exerciseIcon(req, res, err => {
               if (err) {
@@ -341,6 +231,7 @@ router.post('/:id/icon', passport.authenticate('jwt', { session: false }), async
           }
         })
       } else {
+        // Check if the exercise.icon already exists? delete and make a new one
         // Create Exercise Icon
         exerciseIcon(req, res, err => {
           if (err) {

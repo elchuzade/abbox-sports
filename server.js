@@ -39,9 +39,9 @@ app.use('/api/v1/exercises/sets', exerciseSets)
 // Serve static assets if in production (Heroku stuff)
 if (process.env.NODE_ENV === 'production') {
   // Set static folder
-  app.use(express.static('client/build'))
+  app.use(express.static('ts-client/build'))
   app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+    res.sendFile(path.resolve(__dirname, 'ts-client', 'build', 'index.html'))
   })
 }
 

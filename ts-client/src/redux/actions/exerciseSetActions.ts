@@ -9,30 +9,14 @@ import {
 
 import { getErrors, getToastErrors, resetResponse, getResponse, showToast } from './commonActions'
 
-// export const getExercise = (_id: string) => async (dispatch: any) => {
-//   dispatch(resetResponse())
-//   try {
-//     const res = await axios.get(`/api/v1/exercises/${_id}`)
-
-//     dispatch({
-//       type: GET_EXERCISE,
-//       payload: res.data.data
-//     })
-//     dispatch(getResponse(res.data))
-//   } catch (error: any) {
-//     console.log(error)
-//     dispatch(getErrors(error.response.data))
-//   }
-// }
-
 export const getExerciseSets = () => async (dispatch: any) => {
   dispatch(resetResponse())
   try {
-    const res = await axios.get('/api/v1/exercises')
+    const res = await axios.get('/api/v1/exercises/sets')
 
     dispatch({
       type: GET_EXERCISE_SETS,
-      payload: res.data.data
+      payload: res.data?.data
     })
     dispatch(getResponse(res.data))
   } catch (error: any) {
@@ -41,14 +25,30 @@ export const getExerciseSets = () => async (dispatch: any) => {
   }
 }
 
-export const addExerciseSet = (exercise: NewExerciseSet) => async (dispatch: any) => {
+export const getExerciseSet = (exerciseSet: ExerciseSet) => async (dispatch: any) => {
   dispatch(resetResponse())
   try {
-    const res = await axios.post('/api/v1/exercises', exercise)
+    const res = await axios.get(`/api/v1/exercises/sets/${exerciseSet}`)
+
+    dispatch({
+      type: GET_EXERCISE_SET,
+      payload: res.data?.data
+    })
+    dispatch(getResponse(res.data))
+  } catch (error: any) {
+    console.log(error)
+    dispatch(getErrors(error.response.data))
+  }
+}
+
+export const addExerciseSet = (exerciseSet: NewExerciseSet, exercise: Exercise) => async (dispatch: any) => {
+  dispatch(resetResponse())
+  try {
+    const res = await axios.post(`/api/v1/exercises/sets/${exercise._id}`, exerciseSet)
 
     dispatch({
       type: ADD_EXERCISE_SET,
-      payload: res.data.data
+      payload: res.data?.data
     })
     dispatch(getResponse(res.data))
     dispatch(showToast(res.data))
@@ -58,14 +58,14 @@ export const addExerciseSet = (exercise: NewExerciseSet) => async (dispatch: any
   }
 }
 
-export const updateExerciseSet = (exercise: ExerciseSet) => async (dispatch: any) => {
+export const updateExerciseSet = (exerciseSet: ExerciseSet) => async (dispatch: any) => {
   dispatch(resetResponse())
   try {
-    const res = await axios.put(`/api/v1/exercises/${exercise._id}`, exercise)
+    const res = await axios.put(`/api/v1/exercises/sets/${exerciseSet._id}`, exerciseSet)
 
     dispatch({
       type: UPDATE_EXERCISE_SET,
-      payload: res.data.data
+      payload: res.data?.data
     })
     dispatch(getResponse(res.data))
     dispatch(showToast(res.data))
@@ -75,14 +75,14 @@ export const updateExerciseSet = (exercise: ExerciseSet) => async (dispatch: any
   }
 }
 
-export const deleteExerciseSet = (_id: string) => async (dispatch: any) => {
+export const deleteExerciseSet = (exerciseSet: ExerciseSet) => async (dispatch: any) => {
   dispatch(resetResponse())
   try {
-    const res = await axios.delete(`/api/v1/exercises/${_id}`)
+    const res = await axios.delete(`/api/v1/exercises/sets/${exerciseSet._id}`)
 
     dispatch({
       type: DELETE_EXERCISE_SET,
-      payload: res.data.data
+      payload: res.data?.data
     })
     dispatch(getResponse(res.data))
     dispatch(showToast(res.data))

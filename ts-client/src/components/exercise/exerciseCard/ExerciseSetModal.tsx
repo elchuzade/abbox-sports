@@ -56,11 +56,24 @@ const ExerciseSetModal: React.FC<Props> = ({
   }, [responseRedux])
 
   const onAddNewExerciseSet = () => {
-    dispatch(addExerciseSet({ weight, duration, repetitions }))
+    if (weight !== 0 || duration !== 0 || repetitions !== 0) {
+      dispatch(addExerciseSet({
+        weight: weight !== 0 ? weight : undefined,
+        duration: duration !== 0 ? duration : undefined,
+        repetitions: repetitions !== 0 ? repetitions : undefined
+      }, exercise))
+    }
   }
 
   const onEditExerciseSet = () => {
-    dispatch(updateExerciseSet({ _id: exercise._id, weight, duration, repetitions }))
+    if (weight !== 0 || duration !== 0 || repetitions !== 0) {
+      dispatch(updateExerciseSet({
+        _id: exercise._id,
+        weight: weight !== 0 ? weight : undefined,
+        duration: duration !== 0 ? duration : undefined,
+        repetitions: repetitions !== 0 ? repetitions : undefined
+      }))
+    }
   }
 
   const onCloseModal = () => {
@@ -76,9 +89,12 @@ const ExerciseSetModal: React.FC<Props> = ({
       className='modal-bottom'
     >
       <ModalBody>
-        <p className='text-center'>Add New Exercise Set</p>
+        {exerciseSet ?
+          <p className='text-center'>Update Set to <b>{exercise.name}</b></p> :
+          <p className='text-center'>Add Set to <b>{exercise.name}</b></p>
+        }
         <Row className='mb-2'>
-          <Col>
+          {tags?.includes('weight') && <Col>
             <TextInput
               type='number'
               name='weight'
@@ -86,9 +102,10 @@ const ExerciseSetModal: React.FC<Props> = ({
               value={weight}
               onChange={e => setWeight(Number(e.target.value))}
               error={errors.weight}
+              prefix={<i className='fas fa-dumbbell' />}
             />
-          </Col>
-          <Col>
+          </Col>}
+          {tags?.includes('duration') && <Col>
             <TextInput
               type='number'
               name='duration'
@@ -96,9 +113,10 @@ const ExerciseSetModal: React.FC<Props> = ({
               value={duration}
               onChange={e => setDuration(Number(e.target.value))}
               error={errors.duration}
+              prefix={<i className='fas fa-clock' />}
             />
-          </Col>
-          <Col>
+          </Col>}
+          {tags?.includes('repetitions') && <Col>
             <TextInput
               type='number'
               name='repetitions'
@@ -106,8 +124,9 @@ const ExerciseSetModal: React.FC<Props> = ({
               value={repetitions}
               onChange={e => setRepetitions(Number(e.target.value))}
               error={errors.repetitions}
+              prefix={<i className='fas fa-calculator' />}
             />
-          </Col>
+          </Col>}
         </Row>
         <div className='text-center pt-1'>
           {id ? (

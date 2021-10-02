@@ -9,7 +9,8 @@ const ExerciseSchema = new Schema(
       required: true
     },
     name: {
-      type: String
+      type: String,
+      required: true
     },
     icon: {
       location: {
@@ -34,28 +35,10 @@ const ExerciseSchema = new Schema(
         type: String
       }
     },
-    participants: [
+    exerciseSets: [
       {
-        participant: {
-          type: Schema.Types.ObjectId,
-          ref: 'user'
-        },
-        deleted: {
-          type: Boolean,
-          required: true,
-          default: false
-        },
-        joinedAt: {
-          type: Date,
-          required: true,
-          default: Date.now()
-        },
-        leftAt: {
-          type: Date
-        },
-        rejoinedAt: {
-          type: Date
-        }
+        type: Schema.Types.ObjectId,
+        ref: 'exerciseSet',
       }
     ],
     tags: [String],

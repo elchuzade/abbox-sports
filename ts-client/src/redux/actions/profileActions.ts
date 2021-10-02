@@ -14,7 +14,7 @@ export const getProfile = () => async (dispatch: any) => {
 
     dispatch({
       type: GET_PROFILE,
-      payload: res.data.data
+      payload: res.data?.data
     })
     dispatch(getResponse(res.data))
   } catch (error: any) {
@@ -30,7 +30,7 @@ export const updateProfile = (profile: Profile) => async (dispatch: any) => {
 
     dispatch({
       type: UPDATE_PROFILE,
-      payload: res.data.data
+      payload: res.data?.data
     })
     dispatch(getResponse(res.data))
     dispatch(showToast(res.data))
@@ -47,7 +47,7 @@ export const deleteProfile = () => async (dispatch: any) => {
 
     dispatch({
       type: DELETE_PROFILE,
-      payload: res.data.data
+      payload: res.data?.data
     })
     dispatch(getResponse(res.data))
     dispatch(showToast(res.data))

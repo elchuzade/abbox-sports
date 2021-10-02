@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import ExerciseModal from '../../components/exercise/exerciseModal/ExerciseModal'
 import { getExercises } from '../../redux/actions/exerciseActions'
 import ExerciseCard from '../../components/exercise/exerciseCard/ExerciseCard'
+import { Button } from 'reactstrap'
 
 interface Props { }
 
@@ -10,7 +11,6 @@ const Exercises: React.FC<Props> = () => {
   const dispatch = useDispatch()
   const [exerciseModal, setExerciseModal] = useState<boolean>(false)
   const [exercises, setExercises] = useState<Exercise[]>([])
-  const [tappedExercise, setTappedExercise] = useState<Exercise | null>(null)
 
   const exerciseRedux = useSelector((state: State) => state.exercise)
 
@@ -28,28 +28,25 @@ const Exercises: React.FC<Props> = () => {
 
   const onClickNewExercise = () => {
     // Untap any tapped exercise and open modal for adding new exercise
-    setTappedExercise(null)
     setExerciseModal(true)
   }
 
   const onCloseExerciseModal = () => {
-    setTappedExercise(null)
     setExerciseModal(false)
   }
 
   return (
     <>
       <div className='container pb-5 mb-5'>
-        <h5>My Exercises</h5>
+        <h5 className='my-3'>My Exercises<Button onClick={onClickNewExercise} className='p-0 button-small button-unstyled button-theme button-header-add'><i className='fas fa-plus' /></Button></h5>
         {exercises.map((e, i) => (
           <div key={i} className='exercise'>
-            <ExerciseCard exercise={e} tags={['weight', 'duration', 'repetitions']} />
+            <ExerciseCard exercise={e} tags={e.tags} />
           </div>
         ))}
       </div>
       <ExerciseModal
         opened={exerciseModal}
-        exercise={tappedExercise}
         closeModal={onCloseExerciseModal}
       />
     </>

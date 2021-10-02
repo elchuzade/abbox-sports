@@ -3,9 +3,10 @@ import { Modal, ModalBody, Row, Col, Button } from 'reactstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import TextInput from '../../builtin/TextInput'
 import { addExercise, updateExercise } from '../../../redux/actions/exerciseActions'
+import classNames from 'classnames'
 
 interface Props {
-  exercise: Exercise | null;
+  exercise?: Exercise;
   opened: boolean;
   closeModal: () => void;
 }
@@ -19,17 +20,23 @@ const ExerciseModal: React.FC<Props> = ({
   const [errors, setErrors] = useState<any>({})
   const [loading, setLoading] = useState<boolean>(false)
   const [name, setName] = useState<string>('')
-  const [id, setId] = useState<string>('')
+  const [weightTick, setWeightTick] = useState<boolean>(false)
+  const [durationTick, setDurationTick] = useState<boolean>(false)
+  const [repetitionsTick, setRepetitionsTick] = useState<boolean>(false)
 
   const responseRedux = useSelector((state: State) => state.response)
 
   useEffect(() => {
     if (exercise) {
-      setId(exercise._id)
       setName(exercise.name)
+      exercise.tags?.includes('weight') && setWeightTick(true)
+      exercise.tags?.includes('duration') && setDurationTick(true)
+      exercise.tags?.includes('repetitions') && setRepetitionsTick(true)
     } else {
-      setId('')
       setName('')
+      setWeightTick(false)
+      setDurationTick(false)
+      setRepetitionsTick(false)
     }
   }, [exercise])
 
@@ -49,16 +56,28 @@ const ExerciseModal: React.FC<Props> = ({
   }, [responseRedux])
 
   const onAddNewExercise = () => {
-    dispatch(addExercise({ name }))
+    if (weightTick || durationTick || repetitionsTick) {
+      const tags = []
+      weightTick && tags.push('weight')
+      durationTick && tags.push('duration')
+      repetitionsTick && tags.push('repetitions')
+
+      dispatch(addExercise({ name, tags }))
+    }
   }
 
   const onEditExercise = () => {
-    dispatch(updateExercise({ _id: id, name }))
+    if (exercise) {
+      dispatch(updateExercise({ ...exercise, name }))
+    }
   }
 
   const onCloseModal = () => {
     setErrors({})
     setName('')
+    setWeightTick(false)
+    setDurationTick(false)
+    setRepetitionsTick(false)
     closeModal()
   }
 
@@ -71,7 +90,7 @@ const ExerciseModal: React.FC<Props> = ({
     >
       <ModalBody>
         <p className='text-center'>Add New Exercise</p>
-        <Row className='mb-2'>
+        <Row className='mb-4'>
           <Col>
             <TextInput
               name='name'
@@ -82,8 +101,28 @@ const ExerciseModal: React.FC<Props> = ({
             />
           </Col>
         </Row>
+        <Row className='mb-4 px-2'>
+          <Col className='border mx-2 px-0 border-radius-50'>
+            <Button onClick={() => setWeightTick(!weightTick)} className={classNames('mr-3 btn-sm border-radius-50', { 'button-theme': weightTick })}>
+              {weightTick ? <i className='fas fa-check' /> : <i className='fas fa-square' />}
+            </Button>
+            Weight (kg)
+          </Col>
+          <Col className='border mx-2 px-0 border-radius-50'>
+            <Button onClick={() => setDurationTick(!durationTick)} className={classNames('mr-3 btn-sm border-radius-50', { 'button-theme': durationTick })}>
+              {durationTick ? <i className='fas fa-check' /> : <i className='fas fa-square' />}
+            </Button>
+            Duration (s)
+          </Col>
+          <Col className='border mx-2 px-0 border-radius-50'>
+            <Button onClick={() => setRepetitionsTick(!repetitionsTick)} className={classNames('mr-3 btn-sm border-radius-50', { 'button-theme': repetitionsTick })}>
+              {repetitionsTick ? <i className='fas fa-check' /> : <i className='fas fa-square' />}
+            </Button>
+            Repetitions
+          </Col>
+        </Row>
         <div className='text-center pt-1'>
-          {id ? (
+          {exercise ? (
             <Button
               onClick={loading ? undefined : onEditExercise}
               className={`border-radius-50 btn-block button-theme ${loading ? 'disabled' : ''}`}

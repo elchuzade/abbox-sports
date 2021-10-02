@@ -5,7 +5,7 @@ const passport = require('passport')
 // Load Input Validation
 const validateExerciseSetInput = require('../../validation/exerciseSet')
 
-const Profile = require('../../models/Profile')
+const Exercise = require('../../models/Exercise')
 const ExerciseSet = require('../../models/ExerciseSet')
 
 // @route GET exercises/sets/:exerciseId
@@ -14,32 +14,22 @@ const ExerciseSet = require('../../models/ExerciseSet')
 router.get('/:exerciseId', passport.authenticate('jwt', { session: false }), async (req, res) => {
   const errors = {}
   try {
-    const profile = await Profile.findOne({ user: req.user.id })
+    const exercise = await Exercise.findById(req.params.exerciseId)
 
-    if (profile !== null) {
-      let sets = []
-
-      if (!profile.exercises.some(e => e.exercise.toString() === req.params.exerciseId)) {
-        errors.exercise = 'Exercise not found'
-        return res.status(404).json(errors)
+    if (exercise !== null) {
+      if (exercise.user.toString() !== req.user.id) {
+        errors.exercise = 'Unautorized'
+        return res.status(401).json(errors)
+      }
+      if (exercise.deleted) {
+        errors.exercise = 'Exercise is deleted'
+        return res.status(400).json(errors)
       }
 
-      // Find exercise from profile exercises and add this set
-      for (let i = 0; i < profile.exercises.length; i++) {
-        if (profile.exercises[i].exercise.toString() === req.params.exerciseId) {
-          if (profile.exercises[i].deleted) {
-            errors.exercise = 'Exercise is deleted'
-            return res.status(400).json(errors)
-          }
-          // Found exercise
-
-          sets = await ExerciseSet.find({ _id: { $in: profile.exercises[i].sets } })
-          break
-        }
-      }
+      const exerciseSets = ExerciseSet.find({ '_id': { $in: exercise.exerciseSets }, deleted: false })
 
       // Return result of updated exercise
-      return res.status(200).json({ message: 'All sets of exercise', status: 'success', data: sets })
+      return res.status(200).json({ message: 'All sets of exercise', status: 'success', data: exerciseSets })
     }
   } catch (error) {
     console.log(error)
@@ -58,41 +48,35 @@ router.post('/:exerciseId', passport.authenticate('jwt', { session: false }), as
     return res.status(400).json(errors)
   }
   try {
-    const profile = await Profile.findOne({ user: req.user.id })
+    const exercise = await Exercise.findById(req.params.exerciseId)
+    // Create a new exercise set
+    let newExerciseSet = new ExerciseSet({
+      user: req.user.id,
+      exercise: req.params.exerciseId,
+      repetitions: req.body.repetitions,
+      duration: req.body.duration,
+      weight: req.body.weight
+    })
 
-    if (profile !== null) {
-      if (!profile.exercises.some(e => e.exercise.toString() === req.params.exerciseId)) {
-        errors.exercise = 'Exercise not found'
-        return res.status(404).json(errors)
+    if (exercise !== null) {
+      if (exercise.user.toString() !== req.user.id) {
+        errors.exercise = 'Unautorized'
+        return res.status(401).json(errors)
+      }
+      if (exercise.deleted) {
+        errors.exercise = 'Exercise is deleted'
+        return res.status(400).json(errors)
       }
 
-      // Find exercise from profile exercises and add this set
-      for (let i = 0; i < profile.exercises.length; i++) {
-        if (profile.exercises[i].exercise.toString() === req.params.exerciseId) {
-          if (profile.exercises[i].deleted) {
-            errors.exercise = 'Exercise is deleted'
-            return res.status(400).json(errors)
-          }
-          // Found exercise
-          let newExerciseSet = new ExerciseSet({
-            user: req.user.id,
-            exercise: req.params.exerciseId,
-            repetitions: req.body.repetitions,
-            duration: req.body.duration,
-            weight: req.body.weight
-          })
+      const savedExerciseSet = await newExerciseSet.save()
 
-          const savedExercise = await newExerciseSet.save()
-          profile.exercises[i].sets.push(savedExercise._id)
-          break
-        }
-      }
+      exercise.exerciseSets.unshift(savedExerciseSet._id)
 
       // Save made updates
-      const updatedProfile = await profile.save()
+      const updatedExercise = await exercise.save()
 
       // Return result of updated exercise
-      return res.status(200).json({ message: 'Added new Set to Exercise', status: 'success', data: updatedProfile})
+      return res.status(200).json({ message: 'Added new Set to Exercise', status: 'success', data: { exercise: updatedExercise, exerciseSet: savedExerciseSet } })
     }
   } catch (error) {
     console.log(error)
@@ -101,10 +85,10 @@ router.post('/:exerciseId', passport.authenticate('jwt', { session: false }), as
   }
 })
 
-// @route PUT exercises/sets/:exerciseId/:setId
+// @route PUT exercises/sets/:setId
 // @desc Update exercise set
 // @access PRIVATE
-router.put('/:exerciseId/:setId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.put('/:setId', passport.authenticate('jwt', { session: false }), async (req, res) => {
   const { errors, isValid } = validateExerciseSetInput(req.body)
   // Check for validation errors
   if (!isValid) {
@@ -122,13 +106,13 @@ router.put('/:exerciseId/:setId', passport.authenticate('jwt', { session: false 
         errors.exerciseSet = 'Exercise set is deleted'
         return res.status(400).json(errors)
       }
-      
+
       exerciseSet.duration = req.body.duration
       exerciseSet.repetitions = req.body.repetitions
       exerciseSet.weight = req.body.weight
 
       updatedExerciseSet = await exerciseSet.save()
-      
+
       // Return result of updated exercise
       return res.status(200).json({ message: 'Updated exercise set', status: 'success', data: updatedExerciseSet })
     }
@@ -139,10 +123,10 @@ router.put('/:exerciseId/:setId', passport.authenticate('jwt', { session: false 
   }
 })
 
-// @route DELETE exercises/sets/:exerciseId/:setId
+// @route DELETE exercises/sets/:setId
 // @desc Delete exercise set
 // @access PRIVATE
-router.delete('/:exerciseId/:setId', passport.authenticate('jwt', { session: false }), async (req, res) => {
+router.delete('/:setId', passport.authenticate('jwt', { session: false }), async (req, res) => {
   const errors = {}
   try {
     const exerciseSet = await ExerciseSet.findById(req.params.setId)
@@ -152,11 +136,15 @@ router.delete('/:exerciseId/:setId', passport.authenticate('jwt', { session: fal
         errors.exerciseSet = 'Unauthorized'
         return res.status(401).json(errors)
       }
-      
+      if (exerciseSet.deleted) {
+        errors.exerciseSet = 'Exercise set is deleted'
+        return res.status(400).json(errors)
+      }
+
       exerciseSet.deleted = true
 
       deletedExerciseSet = await exerciseSet.save()
-      
+
       // Return result of updated exercise
       return res.status(200).json({ message: 'Deleted exercise set', status: 'success', data: deletedExerciseSet })
     }

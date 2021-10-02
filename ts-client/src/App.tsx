@@ -21,6 +21,7 @@ import NotFound from './pages/NotFound'
 import Landing from './pages/Landing'
 import Profile from './pages/Profile'
 import Exercises from './pages/exercises/Exercises'
+import Exercise from './pages/exercises/Exercise'
 
 const checkToken = () => {
   if (localStorage.jwtToken) {
@@ -45,7 +46,7 @@ const checkToken = () => {
 
 const App: React.FC = () => {
   const dispatch = useDispatch()
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false)
 
   const auth = useSelector((state: State) => state.auth)
 
@@ -69,6 +70,7 @@ const App: React.FC = () => {
         <Route exact path='/signup' component={Signup} />
         <PrivateRoute exact path='/profile' component={Profile} />
         <PrivateRoute exact path='/exercises' component={Exercises} />
+        <PrivateRoute exact path='/exercises/:id' component={Exercise} />
         <Route path='*' component={NotFound} />
       </Switch>
       <ToastContainer />

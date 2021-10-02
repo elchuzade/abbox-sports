@@ -8,9 +8,9 @@ interface Props { }
 
 const Profile: React.FC<Props> = () => {
   const dispatch = useDispatch()
-  const [name, setName] = useState('Your Name')
-  const [showNameInput, setShowNameInput] = useState(false)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [name, setName] = useState<string>('Your Name')
+  const [showNameInput, setShowNameInput] = useState<boolean>(false)
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false)
 
   const profileRedux = useSelector((state: State) => state.profile)
 
