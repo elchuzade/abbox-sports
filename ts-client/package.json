@@ -13,6 +13,7 @@
     "@types/react-router-dom": "^5.3.0",
     "axios": "^0.21.4",
     "jwt-decode": "^3.1.2",
+    "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.5",
@@ -48,8 +49,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5001",
   "devDependencies": {
     "@types/react-router-dom": "^5.3.0"
-  }
+  },
+  "proxy": "http://localhost:8080"
 }
