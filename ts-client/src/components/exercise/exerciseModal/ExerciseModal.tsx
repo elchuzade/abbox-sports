@@ -43,17 +43,18 @@ const ExerciseModal: React.FC<Props> = ({
   useEffect(() => {
     // If there are any errors in redux set them to the input field
     responseRedux.errors && setErrors(responseRedux.errors)
-    // Change status of loadin to true when first submitted then to false when server has responded
+    // Change status of loading to true when first submitted then to false when server has responded
     setLoading(responseRedux.loading)
     // If response status and message are positive, object is created successfully and modal is open, close the modal
     if ((responseRedux.status === 200 ||
       responseRedux.status === 201 ||
       responseRedux.status === 'success') &&
       responseRedux.message.length > 0 &&
-      opened) {
+      opened &&
+      loading) {
       onCloseModal()
     }
-  }, [responseRedux, opened])
+  }, [responseRedux])
 
   const onCloseModal = () => {
     setErrors({})
@@ -72,12 +73,14 @@ const ExerciseModal: React.FC<Props> = ({
       repetitionsTick && tags.push('repetitions')
 
       dispatch(addExercise({ name, tags }))
+      setLoading(true)
     }
   }
 
   const onEditExercise = () => {
     if (exercise) {
       dispatch(updateExercise({ ...exercise, name }))
+      setLoading(true)
     }
   }
 

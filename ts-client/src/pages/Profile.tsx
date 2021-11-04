@@ -76,9 +76,6 @@ const Profile: React.FC<Props> = () => {
             </div>
           </div>
         }
-        <div className='row'>
-          My Words
-        </div>
       </div>
     </div>
   )

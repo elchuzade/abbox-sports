@@ -2,6 +2,7 @@
 
 .modal {
   background: rgba(0, 0, 0, 0.75);
+  z-index: 100000 !important;
 }
 
 .modal-button {

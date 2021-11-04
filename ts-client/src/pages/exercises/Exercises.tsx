@@ -25,7 +25,6 @@ const Exercises: React.FC<Props> = () => {
     }
   }, [exerciseRedux])
 
-
   const onClickNewExercise = () => {
     // Untap any tapped exercise and open modal for adding new exercise
     setExerciseModal(true)
@@ -45,10 +44,10 @@ const Exercises: React.FC<Props> = () => {
           </div>
         ))}
       </div>
-      <ExerciseModal
+      {exerciseModal && <ExerciseModal
         opened={exerciseModal}
         closeModal={onCloseExerciseModal}
-      />
+      />}
     </>
   )
 }
