@@ -51,7 +51,8 @@ const ExerciseSetModal: React.FC<Props> = ({
       responseRedux.status === 201 ||
       responseRedux.status === 'success') &&
       responseRedux.message.length > 0 &&
-      opened) {
+      opened &&
+      loading) {
       onCloseModal()
     }
   }, [responseRedux])
@@ -63,6 +64,7 @@ const ExerciseSetModal: React.FC<Props> = ({
         duration: duration !== 0 ? duration : undefined,
         repetitions: repetitions !== 0 ? repetitions : undefined
       }, exercise))
+      setLoading(true)
     }
   }
 
@@ -77,11 +79,17 @@ const ExerciseSetModal: React.FC<Props> = ({
         duration: duration !== 0 ? duration : undefined,
         repetitions: repetitions !== 0 ? repetitions : undefined
       }))
+      setLoading(true)
     }
   }
 
   const onCloseModal = () => {
     setErrors({})
+    setId('')
+    setWeight(undefined)
+    setDuration(undefined)
+    setRepetitions(undefined)
+    setLoading(false)
     closeModal()
   }
 

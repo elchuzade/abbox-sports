@@ -62,6 +62,7 @@ const ExerciseModal: React.FC<Props> = ({
     setWeightTick(false)
     setDurationTick(false)
     setRepetitionsTick(false)
+    setLoading(false)
     closeModal()
   }
 
