@@ -69,6 +69,9 @@ const ExerciseSetModal: React.FC<Props> = ({
   const onEditExerciseSet = () => {
     if (weight !== 0 || duration !== 0 || repetitions !== 0) {
       dispatch(updateExerciseSet({
+        createdAt: exerciseSet?.createdAt,
+        updatedAt: exerciseSet?.updatedAt,
+        deleted: exerciseSet?.deleted || false,
         _id: exercise._id,
         weight: weight !== 0 ? weight : undefined,
         duration: duration !== 0 ? duration : undefined,

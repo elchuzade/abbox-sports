@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useState } from 'react'
+// import { useSelector, useDispatch } from 'react-redux'
 import ExerciseSetModal from '../exerciseModal/ExerciseSetModal'
 import { Button } from 'reactstrap'
 import { Link } from 'react-router-dom'

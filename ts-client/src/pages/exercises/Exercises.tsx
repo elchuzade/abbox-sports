@@ -16,7 +16,7 @@ const Exercises: React.FC<Props> = () => {
 
   useEffect(() => {
     dispatch(getExercises())
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     if (exerciseRedux.exercises?.length > 0) {

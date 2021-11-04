@@ -28,7 +28,6 @@ const Login: React.FC<Props> = () => {
 
   const onSubmit = (e: any) => {
     e?.preventDefault()
-    console.log('clicking')
     if (email && password) {
       dispatch(loginUser({ email, password }))
     }

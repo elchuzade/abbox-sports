@@ -12,7 +12,7 @@ const initialState: ExerciseRedux = {
   exercises: [],
 }
 
-export default (state = initialState, action: any) => {
+const exerciseReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case DELETE_EXERCISE:
       return {
@@ -48,3 +48,5 @@ export default (state = initialState, action: any) => {
       return state
   }
 }
+
+export default exerciseReducer

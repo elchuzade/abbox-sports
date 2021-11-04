@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { getProfile, updateProfile, deleteProfile } from '../redux/actions/profileActions'
+import {
+  getProfile, updateProfile,
+  // deleteProfile
+} from '../redux/actions/profileActions'
 
 import TextInput from '../components/builtin/TextInput'
 
@@ -16,7 +19,8 @@ const Profile: React.FC<Props> = () => {
 
   useEffect(() => {
     dispatch(getProfile())
-  }, [])
+    console.log(showDeleteModal)
+  }, [dispatch, showDeleteModal])
 
   useEffect(() => {
     if (profileRedux?.profile?.name) {
@@ -35,15 +39,15 @@ const Profile: React.FC<Props> = () => {
     }
   }
 
-  const onClickDeleteName = () => {
-    dispatch(deleteProfile())
-  }
+  // const onClickDeleteName = () => {
+  //   dispatch(deleteProfile())
+  // }
 
-  const DeleteProfileComponent = () => (
-    <div className='text-center'>
-      <b>{name}</b>
-    </div>
-  )
+  // const DeleteProfileComponent = () => (
+  //   <div className='text-center'>
+  //     <b>{name}</b>
+  //   </div>
+  // )
 
   return (
     <div>

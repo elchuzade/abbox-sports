@@ -53,7 +53,16 @@ const ExerciseModal: React.FC<Props> = ({
       opened) {
       onCloseModal()
     }
-  }, [responseRedux])
+  }, [responseRedux, opened])
+
+  const onCloseModal = () => {
+    setErrors({})
+    setName('')
+    setWeightTick(false)
+    setDurationTick(false)
+    setRepetitionsTick(false)
+    closeModal()
+  }
 
   const onAddNewExercise = () => {
     if (weightTick || durationTick || repetitionsTick) {
@@ -70,15 +79,6 @@ const ExerciseModal: React.FC<Props> = ({
     if (exercise) {
       dispatch(updateExercise({ ...exercise, name }))
     }
-  }
-
-  const onCloseModal = () => {
-    setErrors({})
-    setName('')
-    setWeightTick(false)
-    setDurationTick(false)
-    setRepetitionsTick(false)
-    closeModal()
   }
 
   return (

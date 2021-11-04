@@ -54,12 +54,12 @@ const App: React.FC = () => {
     if (auth.isAuthenticated !== isAuthenticated) {
       setIsAuthenticated(auth.isAuthenticated)
     }
-  }, [auth])
+  }, [auth, isAuthenticated])
 
   useEffect(() => {
     setIsAuthenticated(checkToken())
     dispatch(stopLoadingAuth())
-  }, [])
+  }, [dispatch])
 
   return (
     <div data-testid='App' className='App'>

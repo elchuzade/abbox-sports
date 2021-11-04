@@ -8,7 +8,7 @@ const initialState: ProfileRedux = {
   profile: null
 }
 
-export default (state = initialState, action: any) => {
+const profileReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case GET_PROFILE:
     case UPDATE_PROFILE:
@@ -21,3 +21,5 @@ export default (state = initialState, action: any) => {
       return state
   }
 }
+
+export default profileReducer

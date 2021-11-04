@@ -26,7 +26,6 @@ export const signupUser = (userData: SignupUserData) => async (dispatch: any) =>
 
 export const loginUser = (userData: LoginUserData) => async (dispatch: any) => {
   dispatch(refreshErrors())
-  console.log('testing login')
   try {
     const res = await axios.post('/api/v1/users/login', userData)
 

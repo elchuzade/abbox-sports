@@ -27,6 +27,10 @@
   border-radius: 0.75rem;
 }
 
+.exercise-data-week-latest {
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
+}
+
 .exercise-data-week-header {
   height: 100%;
   font-size: 0.75rem;
@@ -36,10 +40,13 @@
 }
 
 .exercise-data-square {
-  background: var(--theme-main-background-dark);
   border-radius: 0.5rem;
   font-size: 0.75rem;
   border: 1px solid var(--theme-border);
+}
+
+.exercise-data-square-latest {
+  background: var(--theme-main-background-dark);
 }
 
 .exercise-data-square-header {

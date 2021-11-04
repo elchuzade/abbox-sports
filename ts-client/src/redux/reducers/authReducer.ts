@@ -7,7 +7,7 @@ const initialState: AuthRedux = {
   loadingAuth: true
 }
 
-export default (state = initialState, action: any) => {
+const authReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case SET_CURRENT_USER:
       return {
@@ -29,3 +29,5 @@ export default (state = initialState, action: any) => {
       return state
   }
 }
+
+export default authReducer

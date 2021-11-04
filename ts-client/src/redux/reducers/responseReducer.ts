@@ -7,7 +7,7 @@ const initialState: ResponseRedux = {
   errors: null
 }
 
-export default (state = initialState, action: any) => {
+const responseReducer = (state = initialState, action: any) => {
   switch (action.type) {
     case GET_LOADING:
       return {
@@ -49,3 +49,5 @@ export default (state = initialState, action: any) => {
       return state
   }
 }
+
+export default responseReducer

@@ -1,76 +1,94 @@
 interface State {
-  auth: AuthRedux;
-  response: ResponseRedux;
-  profile: ProfileRedux;
-  exercise: ExerciseRedux;
+  auth: AuthRedux
+  response: ResponseRedux
+  profile: ProfileRedux
+  exercise: ExerciseRedux
 }
 
 interface AuthRedux {
-  isAuthenticated: boolean;
-  user: UserDataDecoded | null;
-  loadingAuth: boolean;
+  isAuthenticated: boolean
+  user: UserDataDecoded | null
+  loadingAuth: boolean
 }
 
 interface ResponseRedux {
-  loading: boolean;
-  status: string | number;
-  message: string;
-  errors: object | null;
+  loading: boolean
+  status: string | number
+  message: string
+  errors: object | null
 }
 
 interface ProfileRedux {
-  profile: Profile | null;
+  profile: Profile | null
 }
 
 interface ExerciseRedux {
-  exercises: Exercise[];
-  exercise: Exercise | null;
+  exercises: Exercise[]
+  exercise: Exercise | null
 }
 
 interface SignupUserData {
-  email: string;
-  password: string;
-  password2: string;
+  email: string
+  password: string
+  password2: string
 }
 
 interface LoginUserData {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 // Check this field when logged in
 interface UserDataDecoded {
-  id: string;
-  iat: string;
-  exp: string;
-  permission: number;
+  id: string
+  iat: string
+  exp: string
+  permission: number
 }
 
 interface Profile {
-  name: string;
+  name: string
 }
 
 interface NewExercise {
-  name: string;
-  tags: string[];
+  name: string
+  tags: string[]
 }
 
 interface Exercise {
-  _id: string;
-  name: string;
-  tags?: string[];
-  exerciseSets?: string[];
+  _id: string
+  name: string
+  tags?: string[]
+  exerciseSets?: ExerciseSet[]
 }
 
 interface NewExerciseSet {
-  weight?: number;
-  duration?: number;
-  repetitions?: number;
+  weight?: number
+  duration?: number
+  repetitions?: number
 }
 
 interface ExerciseSet {
-  _id: string;
-  weight?: number;
-  duration?: number;
-  repetitions?: number;
+  createdAt: date
+  updatedAt: date
+  deleted: boolean
+  _id: string
+  weight?: number
+  duration?: number
+  repetitions?: number
+  dayOfWeek?: string
+}
+
+interface WeeksYear {
+  [key: string]: WeekYear
+}
+
+interface WeekYear {
+  week: number
+  days: any
+  latest: boolean
+}
+
+interface WeekDay {
+  [key: string]: ExerciseSet
 }
