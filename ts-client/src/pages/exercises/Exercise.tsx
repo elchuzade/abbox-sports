@@ -27,9 +27,6 @@ const Exercises: React.FC<Props> = () => {
       let updatedExerciseSets: any[] = []
       let firstYear: number = 0
       if (exerciseRedux.exercise.exerciseSets && exerciseRedux.exercise.exerciseSets.length > 0) {
-        // let firstWeek = getWeekNumber(exerciseRedux.exercise.exerciseSets[0].createdAt)
-        // let lastWeek = getWeekNumber(new Date())
-
         // last entry is the first year the user joined
         firstYear = getYearNumber(exerciseRedux.exercise.exerciseSets[exerciseRedux.exercise.exerciseSets.length - 1].createdAt)
 
@@ -137,7 +134,7 @@ const Exercises: React.FC<Props> = () => {
   }
 
   const WeekOfTheYear = (week: WeekYear) => {
-    const weekDays: string[] = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    const weekDays: string[] = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     let modifiedWeek: WeekYear = {
       ...week,
       days: {}
