@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, ModalBody, Row, Col, Button } from 'reactstrap'
+import { Modal, ModalBody, Row, Col, Button, ModalHeader } from 'reactstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import TextInput from '../../builtin/TextInput'
 import { addExerciseSet, updateExerciseSet } from '../../../redux/actions/exerciseSetActions'
@@ -98,13 +98,12 @@ const ExerciseSetModal: React.FC<Props> = ({
       isOpen={opened}
       toggle={onCloseModal}
       size='md'
-      className='modal-bottom'
+      className='modal-bottom text-center'
     >
+      <ModalHeader className='modal-header'>
+        {exercise.name}
+      </ModalHeader>
       <ModalBody>
-        {exerciseSet ?
-          <p className='text-center'>Update Set to <b>{exercise.name}</b></p> :
-          <p className='text-center'>Add Set to <b>{exercise.name}</b></p>
-        }
         <Row className='mb-2'>
           {tags?.includes('weight') && <Col>
             <TextInput
@@ -144,16 +143,16 @@ const ExerciseSetModal: React.FC<Props> = ({
           {id ? (
             <Button
               onClick={loading ? undefined : onEditExerciseSet}
-              className={`border-radius-50 btn-block button-theme ${loading ? 'disabled' : ''}`}
+              className={`border-radius-50 btn-block button-theme-light ${loading ? 'disabled' : ''}`}
             >
               {loading ? <div className='loaderButton' /> : 'Save'}
             </Button>
           ) : (
             <Button
               onClick={loading ? undefined : onAddNewExerciseSet}
-              className={`border-radius-50 btn-block button-theme ${loading ? 'disabled' : ''}`}
+              className={`border-radius-50 btn-block button-theme-light ${loading ? 'disabled' : ''}`}
             >
-              {loading ? <div className='loaderButton' /> : 'Add'}
+              {loading ? <div className='loaderButton' /> : 'ADD'}
             </Button>
           )}
         </div>

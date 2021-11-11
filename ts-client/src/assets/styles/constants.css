@@ -5,4 +5,9 @@
   --loader-color-dark: white;
   --loader-color-light: black;
   --theme-border: #D9DEE2;
+  /* NEW DESIGN */
+  --theme-main-dark: #1B5964;
+  --theme-main-light: #008C94;
+  --theme-main-lighter: #DFE5E6;
+  --theme-slight-shadow: rgba(11, 35, 39, 0.8);
 }

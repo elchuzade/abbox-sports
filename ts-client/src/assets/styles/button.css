@@ -1,12 +1,19 @@
 @import './constants.css';
 
-.button-small {
-  height: 2rem;
-  width: 2rem;
-}
-
 .button-theme {
   background-color: var(--theme-main-button);
+}
+
+.button-theme-light {
+  background-color: var(--theme-main-light);
+}
+
+.button-theme-lighter {
+  background-color: var(--theme-main-lighter);
+}
+
+.button-theme-dark {
+  background-color: var(--theme-main-dark);
 }
 
 .button-theme-round {
@@ -35,13 +42,26 @@
 
 .button-header-add {
   margin-left: 1rem;
-  color: white;
+  color: var(--theme-main-lighter);
   border-radius: 1rem;
   font-size: 1rem;
 }
 
 .button-exercise-card-add {
   font-size: 1.5rem;
-  margin: auto 0.4rem auto auto;
-  border-radius: 0.75rem;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  height: 100%;
+  background: var(--theme-main-light);
+}
+
+.button-exercise-card-add i {
+  color: var(--theme-main-lighter);
+}
+
+.button-dark {
+  background: var(--theme-main-dark);
+  color: var(--theme-main-lighter);
 }

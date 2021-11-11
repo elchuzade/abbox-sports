@@ -3,6 +3,7 @@ interface State {
   response: ResponseRedux
   profile: ProfileRedux
   exercise: ExerciseRedux
+  common: CommonRedux
 }
 
 interface AuthRedux {
@@ -25,6 +26,11 @@ interface ProfileRedux {
 interface ExerciseRedux {
   exercises: Exercise[]
   exercise: Exercise | null
+}
+
+interface CommonRedux {
+  navbarClick: () => void;
+  navbarText: string;
 }
 
 interface SignupUserData {

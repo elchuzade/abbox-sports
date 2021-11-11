@@ -1,29 +1,44 @@
 @import './constants.css';
 
 .exercise-card {
-  height: 60px;
-  border: 1px solid var(--theme-border);
+  height: 80px;
   margin: 0.5rem;
   border-radius: 1rem;
-  background: var(--theme-main-background-dark);
+  background: white;
+  box-shadow: 0 0 5px var(--theme-slight-shadow);
 }
 
-.exercise-card-left {
-  width: 80%;
+.exercise-card-title {
+  font-size: 0.8rem;
+  font-weight: 300;
+  margin-bottom: 0;
+  text-align: left !important;
+  margin-left: 0.5rem;
 }
 
-.exercise-card-left span {
-  width: 100%;
+.exercise-card-description {
+  font-size: 0.8rem;
+  color: var(--theme-main-lighter);
+  line-height: 0.8rem;
   text-align: left;
+  margin: 0.25rem 0.5rem 0.25rem 0.5rem;
 }
 
-.exercise-card-right {
-  width: 20%;
-  text-align: right;
+.exercise-card-tags {
+  text-align: left;
+  margin-left: 0.5rem;
+  margin-bottom: 0;
+}
+
+.exercise-card-icon {
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  border-color: var(--theme-main-dark);
 }
 
 .exercise-data-week {
-  border: 1px solid var(--theme-border);
+  background: white;
+  border: 1px solid var(--theme-main-light);
   border-radius: 0.75rem;
 }
 
@@ -34,21 +49,50 @@
 .exercise-data-week-header {
   height: 100%;
   font-size: 0.75rem;
-  color: grey;
-  border: 1px solid var(--theme-border);
+  color: var(--theme-main-dark);
   border-radius: 0.5rem;
 }
 
 .exercise-data-square {
   border-radius: 0.5rem;
   font-size: 0.75rem;
-  border: 1px solid var(--theme-border);
+  border: 1px solid var(--theme-main-light);
 }
 
 .exercise-data-square-latest {
-  background: var(--theme-main-background-dark);
+  background: var(--theme-main-dark);
+  color: white;
 }
 
 .exercise-data-square-header {
-  border-bottom: 1px solid var(--theme-border);
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--theme-main-light);
+  color: var(--theme-main-dark) !important;
+}
+
+.exercise-data-square-header-latest {
+  color: var(--theme-main-lighter) !important;
+}
+
+.exercise-icon {
+  width: 100px;
+  border-radius: 1rem;
+  border-color: var(--theme-main-dark);
+}
+
+.exercise-description {
+  line-height: 1rem;
+  font-size: 0.8rem;
+  margin: 0.25rem 0;
+}
+
+.exercise-tag {
+  font-size: 0.75rem;
+  border: 1px solid var(--theme-main-dark);
+  border-radius: 0.5rem;
+  padding: 0.25rem 0;
+  margin: 0.25rem;
+  text-align: center;
+  background: var(--theme-main-dark);
+  color: var(--theme-main-lighter);
 }
