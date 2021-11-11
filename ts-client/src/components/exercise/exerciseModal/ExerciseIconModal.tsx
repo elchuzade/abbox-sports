@@ -3,7 +3,7 @@ import { Modal, ModalBody, Row, Col, Button, ModalHeader } from 'reactstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import TextInput from '../../builtin/TextInput'
 import TextareaInput from '../../builtin/TextareaInput'
-import { uploadExerciseIcon } from '../../../redux/actions/exerciseActions'
+// import { uploadExerciseIcon } from '../../../redux/actions/exerciseActions'
 
 interface Props {
   exercise?: Exercise;
@@ -102,14 +102,14 @@ const ExerciseModal: React.FC<Props> = ({
         <div className='text-center pt-1'>
           {exercise ? (
             <Button
-              onClick={loading ? undefined : onEditExercise}
+              // onClick={loading ? undefined : onEditExercise}
               className={`border-radius-50 btn-block button-theme-light ${loading ? 'disabled' : ''}`}
             >
               {loading ? <div className='loaderButton' /> : 'Save'}
             </Button>
           ) : (
             <Button
-              onClick={loading ? undefined : onAddNewExercise}
+              // onClick={loading ? undefined : onAddNewExercise}
               className={`border-radius-50 btn-block button-theme-light ${loading ? 'disabled' : ''}`}
             >
               {loading ? <div className='loaderButton' /> : 'ADD'}
