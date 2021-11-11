@@ -5,14 +5,19 @@ import { Row, Col } from 'reactstrap'
 import getWeekNumber from '../../utils/getWeekNumber'
 import getYearNumber from '../../utils/getYearNumber'
 import groupArrayByKey from '../../utils/groupArrayByKey'
+import { setNavbarValues } from '../../redux/actions/commonActions'
+import ExerciseSetModal from '../../components/exercise/exerciseModal/ExerciseSetModal'
+import ExerciseModal from '../../components/exercise/exerciseModal/ExerciseModal'
+import ExerciseIconModal from '../../components/exercise/exerciseModal/ExerciseIconModal'
 
 interface Props { }
-
 
 const Exercises: React.FC<Props> = () => {
   const dispatch = useDispatch()
   const [exercise, setExercise] = useState<Exercise>()
   const [weeks, setWeeks] = useState<WeekYear[]>([])
+  const [exerciseSetModal, setExerciseSetModal] = useState<boolean>(false)
+  const [exerciseModal, setExerciseModal] = useState<boolean>(false)
 
   const exerciseRedux = useSelector((state: State) => state.exercise)
 
@@ -20,6 +25,10 @@ const Exercises: React.FC<Props> = () => {
     let id = window.location.pathname.split('/exercises/')[1]
     id = id.replace('/', '')
     dispatch(getExercise(id))
+    dispatch(setNavbarValues({
+      navbarClick: onClickNewExercise,
+      navbarText: 'SETS +'
+    }))
   }, [dispatch])
 
   useEffect(() => {
@@ -99,9 +108,16 @@ const Exercises: React.FC<Props> = () => {
         }
         setWeeks(populatedArrayOfAllWeeks.reverse())
       }
-
     }
   }, [exerciseRedux])
+
+  const onClickNewExercise = () => {
+    setExerciseSetModal(true)
+  }
+
+  const onCloseExerciseSetModal = () => {
+    setExerciseSetModal(false)
+  }
 
   const DayOfTheWeek = (day: ExerciseSet[] | null, weekDay: string, latest: boolean) => {
     if (day === null) {
@@ -124,13 +140,21 @@ const Exercises: React.FC<Props> = () => {
 
       return (
         <div className={`exercise-data-square ${latest ? 'exercise-data-square-latest' : ''}`}>
-          <div className='exercise-data-square-header'><small className='text-muted'>{weekDay}</small></div>
+          <div className={`exercise-data-square-header ${latest ? 'exercise-data-square-header-latest' : ''}`}>{weekDay}</div>
           {exercise?.tags?.includes('weight') && <div><i className='fas fa-dumbbell mr-2' />{totalWeight}</div>}
           {exercise?.tags?.includes('duration') && <div><i className='fas fa-clock mr-2' />{totalDuration}</div>}
           {exercise?.tags?.includes('repetitions') && <div><i className='fas fa-calculator mr-2' />{totalRepetitions}</div>}
         </div>
       )
     }
+  }
+
+  const openExerciseModal = () => {
+    setExerciseModal(true)
+  }
+
+  const closeExerciseModal = () => {
+    setExerciseModal(false)
   }
 
   const WeekOfTheYear = (week: WeekYear) => {
@@ -152,7 +176,6 @@ const Exercises: React.FC<Props> = () => {
         <Row className='mx-0'>
           {modifiedWeek && Object.keys(modifiedWeek.days).map((day, i) => (
             <Col key={i} xs='3' className='px-1 my-1'>
-              {/* day is Sun, Mon, Tue ..., modifiedWeek[day] is array of ExerciseSets of that day */}
               {DayOfTheWeek(modifiedWeek.days[day], day, modifiedWeek.latest)}
             </Col>
           ))}
@@ -169,13 +192,36 @@ const Exercises: React.FC<Props> = () => {
   return (
     <>
       <div className='container pb-5 mb-5'>
-        <h5 className='my-3'>{exercise?.name}</h5>
-        {exercise?.tags?.map((t, i) => (
-          <span className='mx-1 border py-1 px-2 border-radius-50' key={i}>{t}</span>
-        ))}
-        <div className='my-1'>Data</div>
+        <div className='d-flex py-3'>
+          <img src='https://picsum.photos/200' alt='' className='exercise-icon' />
+          <div className='ml-3 text-left text-dark'>
+            <h5 className='mb-0'>{exercise?.name} <span onClick={openExerciseModal} className='float-right'><i className='fas fa-pencil-alt' /></span></h5>
+            <div className='exercise-description'>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</div>
+            <Row className='px-2'>
+              {exercise?.tags?.map((t, i) => (
+                <Col key={i} className='exercise-tag'>
+                  <span className='m-auto'>{t}</span>
+                </Col>
+              ))}
+            </Row>
+          </div>
+        </div>
+        <div>Data ({exercise?.exerciseSets?.length})</div>
         {weeks.map((week_year, i) => <div key={i}>{WeekOfTheYear(week_year)}</div>)}
       </div>
+      {exerciseSetModal && exercise &&
+        <ExerciseSetModal
+          exercise={exercise}
+          tags={exercise.tags}
+          opened={exerciseSetModal}
+          closeModal={onCloseExerciseSetModal}
+        />}
+      {exerciseModal && exercise &&
+        <ExerciseModal
+          exercise={exercise}
+          opened={exerciseModal}
+          closeModal={closeExerciseModal}
+        />}
     </>
   )
 }

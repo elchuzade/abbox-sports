@@ -1,5 +1,29 @@
 @import './constants.css';
 
+body {
+  font-family: 'Baloo';
+}
+
+.text-black {
+  color: black !important;
+}
+
+.text-dark {
+  color: var(--theme-main-dark) !important;
+}
+
+.text-light {
+  color: var(--theme-main-light) !important;
+}
+
+.text-lighter {
+  color: var(--theme-main-lighter) !important;
+}
+
+.text-white {
+  color: white !important;
+}
+
 .link-unstyled {
   color: black;
 }
@@ -22,7 +46,7 @@
   width: 100%;
   min-height: 100vh;
   overflow-x: hidden;
-  background: var(--theme-main-background-light);
+  background: var(--theme-main-lighter);
 }
 
 .border-radius-50 {

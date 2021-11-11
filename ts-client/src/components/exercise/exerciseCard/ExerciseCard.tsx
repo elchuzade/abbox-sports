@@ -18,15 +18,20 @@ const ExerciseCard: React.FC<Props> = ({ exercise, tags }) => {
 
   return (
     <div className='exercise-card d-flex'>
-      <Link to={`/exercises/${exercise._id}`} className='exercise-card-left pt-1 pl-1 link-unstyled'>
-        <span className='ml-2 d-block'>{exercise.name} ({exercise.exerciseSets?.length})</span>
-        <p className='text-left mb-0 ml-3'>
-          {tags?.map((t, i) => <small key={i} className='exercise-card-tag'><i>{t}, </i></small>)}
-        </p>
-      </Link>
-      <div className='exercise-card-right d-flex'>
-        <Button onClick={() => setShowExerciseSetModal(true)} className='button-theme button-unstyled button-exercise-card-add'><i className='fas fa-plus text-white py-1' /></Button>
+      <img className='exercise-card-icon' src={'https://picsum.photos/200'} alt='exercise card icon' />
+      <div className='d-flex my-auto'>
+        <Link to={`/exercises/${exercise._id}`} className='exercise-card-left link-unstyled'>
+          <p className='exercise-card-title'>{exercise.name}</p>
+          <p className='exercise-card-description'>Lorem ipsum dolor sit amet consectetur adipisicing elit...</p>
+          <p className='exercise-card-tags'>
+            {tags?.map((t, i) => <small key={i} className='exercise-card-tag'><i>{t}, </i></small>)}
+          </p>
+        </Link>
       </div>
+      <Button onClick={() => setShowExerciseSetModal(true)} className='button-unstyled button-exercise-card-add'>
+        <i className='fas fa-plus py-1' />
+        <span className='text-lighter'>{exercise.exerciseSets?.length}</span>
+      </Button>
       <ExerciseSetModal
         tags={tags}
         exercise={exercise}

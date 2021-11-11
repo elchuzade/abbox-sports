@@ -5,6 +5,9 @@ export const GET_LOADING = 'GET_LOADING'
 export const GET_RESPONSE = 'GET_RESPONSE'
 export const RESET_RESPONSE = 'RESET_RESPONSE'
 
+/* ------ COMMON ------ */
+export const SET_NAVBAR_VALUES = 'SET_NAVBAR_VALUES'
+
 /* ------ AUTH ------ */
 export const LOADING_AUTH = 'LOADING_AUTH'
 export const STOP_LOADING_AUTH = 'STOP_LOADING_AUTH'

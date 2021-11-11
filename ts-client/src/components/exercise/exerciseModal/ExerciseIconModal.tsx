@@ -3,7 +3,7 @@ import { Modal, ModalBody, Row, Col, Button, ModalHeader } from 'reactstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import TextInput from '../../builtin/TextInput'
 import TextareaInput from '../../builtin/TextareaInput'
-import { addExercise, updateExercise } from '../../../redux/actions/exerciseActions'
+import { uploadExerciseIcon } from '../../../redux/actions/exerciseActions'
 
 interface Props {
   exercise?: Exercise;
@@ -68,24 +68,24 @@ const ExerciseModal: React.FC<Props> = ({
     closeModal()
   }
 
-  const onAddNewExercise = () => {
-    if (weightTick || durationTick || repetitionsTick) {
-      const tags = []
-      weightTick && tags.push('weight')
-      durationTick && tags.push('duration')
-      repetitionsTick && tags.push('repetitions')
+  // const onAddNewExercise = () => {
+  //   if (weightTick || durationTick || repetitionsTick) {
+  //     const tags = []
+  //     weightTick && tags.push('weight')
+  //     durationTick && tags.push('duration')
+  //     repetitionsTick && tags.push('repetitions')
 
-      dispatch(addExercise({ name, tags }))
-      setLoading(true)
-    }
-  }
+  //     dispatch(addExercise({ name, tags }))
+  //     setLoading(true)
+  //   }
+  // }
 
-  const onEditExercise = () => {
-    if (exercise) {
-      dispatch(updateExercise({ ...exercise, name }))
-      setLoading(true)
-    }
-  }
+  // const onEditExercise = () => {
+  //   if (exercise) {
+  //     dispatch(updateExercise({ ...exercise, name }))
+  //     setLoading(true)
+  //   }
+  // }
 
   return (
     <Modal
@@ -95,43 +95,10 @@ const ExerciseModal: React.FC<Props> = ({
       className='modal-bottom text-center'
     >
       <ModalHeader className='modal-header'>
-        Add New Exercise
+        Upload Exercise Icon
       </ModalHeader>
       <ModalBody>
-        <Row className='mb-2'>
-          <Col>
-            <TextInput
-              name='name'
-              placeholder='name'
-              value={name}
-              onChange={e => setName(e.target.value)}
-              error={errors.name}
-            />
-          </Col>
-        </Row>
-        <Row className='mb-1'>
-          <Col>
-            <TextareaInput
-              rows={3}
-              name='description'
-              placeholder='description'
-              value={description}
-              onChange={(e: any) => setDescription(e.target.value)}
-              error={errors.description}
-            />
-          </Col>
-        </Row>
-        <Row className='px-2'>
-          <Col className={`modal-tag ${exercise?.tags?.includes('weight') ? 'button-dark' : ''}`} onClick={() => setWeightTick(!weightTick)}>
-            <span className='m-auto'>Weight (kg)</span>
-          </Col>
-          <Col className={`modal-tag ${exercise?.tags?.includes('duration') ? 'button-dark' : ''}`} onClick={() => setDurationTick(!durationTick)}>
-            <span className='m-auto'>Duration (s)</span>
-          </Col>
-          <Col className={`modal-tag ${exercise?.tags?.includes('repetitions') ? 'button-dark' : ''}`} onClick={() => setRepetitionsTick(!repetitionsTick)}>
-            <span className='m-auto'>Repetitions</span>
-          </Col>
-        </Row>
+
         <div className='text-center pt-1'>
           {exercise ? (
             <Button

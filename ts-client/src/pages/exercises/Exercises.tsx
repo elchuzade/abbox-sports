@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import ExerciseModal from '../../components/exercise/exerciseModal/ExerciseModal'
 import { getExercises } from '../../redux/actions/exerciseActions'
 import ExerciseCard from '../../components/exercise/exerciseCard/ExerciseCard'
-import { Button } from 'reactstrap'
+import { setNavbarValues } from '../../redux/actions/commonActions'
 
 interface Props { }
 
@@ -15,6 +15,10 @@ const Exercises: React.FC<Props> = () => {
   const exerciseRedux = useSelector((state: State) => state.exercise)
 
   useEffect(() => {
+    dispatch(setNavbarValues({
+      navbarClick: onClickNewExercise,
+      navbarText: 'EXERCISES +'
+    }))
     dispatch(getExercises())
   }, [dispatch])
 
@@ -37,7 +41,6 @@ const Exercises: React.FC<Props> = () => {
   return (
     <>
       <div className='container pb-5 mb-5'>
-        <h5 className='my-3'>My Exercises<Button onClick={onClickNewExercise} className='p-0 button-small button-unstyled button-theme button-header-add'><i className='fas fa-plus' /></Button></h5>
         {exercises.map((e, i) => (
           <div key={i} className='exercise'>
             <ExerciseCard exercise={e} tags={e.tags} />

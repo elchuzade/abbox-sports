@@ -1,7 +1,8 @@
 @import './constants.css';
 
 .navbar {
-  background: var(--theme-main-background-dark);
+  background: var(--theme-main-lighter);
+  box-shadow: 0 0 10px -4px var(--theme-main-dark);
   height: 50px;
   z-index: 1;
 }
@@ -23,6 +24,10 @@
   right: 0;
   top: 0;
   padding: 0.75rem 1.5rem;
+}
+
+.navbar-logo {
+  width: 4rem;
 }
 
 .navbar-pop {

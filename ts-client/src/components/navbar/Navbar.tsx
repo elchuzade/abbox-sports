@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logoutUser } from '../../redux/actions/authActions'
 import className from 'classnames'
+import abboxSportsLogo from '../../assets/img/abbox-sports-logo.svg'
+import NavbarCenterButton from './NavbarCenterButton'
 
 const Navbar = () => {
   const dispatch = useDispatch()
@@ -22,8 +24,11 @@ const Navbar = () => {
   return (
     <div data-test='navbar' className='navbar'>
       <div className='navbar-logo'>
-        aSports
+        <Link to='/'>
+          <img src={abboxSportsLogo} alt='Abbox Sports' />
+        </Link>
       </div>
+      <NavbarCenterButton />
       <div className='navbar-menu ml-auto'>
         {auth.isAuthenticated && <span className='navbar-menu-item'>
           <Link to='/exercises' className='link-unstyled'>

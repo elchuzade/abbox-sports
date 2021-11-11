@@ -9,26 +9,27 @@ interface Props {
   error?: string;
   info?: string;
   type?: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onChange: React.ChangeEventHandler<HTMLInputElement> | any;
   disabled?: boolean;
   extraClass?: string;
   prefix?: React.ReactElement;
   dataTest?: string;
+  rows: number
 }
 
-const TextInput: React.FC<Props> = ({
+const TextareaInput: React.FC<Props> = ({
   name,
   placeholder,
   value,
   label,
   error,
   info,
-  type,
   onChange,
   disabled,
   extraClass,
   prefix,
-  dataTest
+  dataTest,
+  rows
 }) => {
   return (
     <div className='input-group'>
@@ -38,9 +39,9 @@ const TextInput: React.FC<Props> = ({
           <span className='input-group-text modal-prefix'>{prefix}</span>
         </div>
       )}
-      <input
+      <textarea
         data-test={dataTest}
-        type={type}
+        rows={rows}
         className={classnames(`form-control ${extraClass || ''}`, {
           'is-invalid': error
         })}
@@ -56,4 +57,4 @@ const TextInput: React.FC<Props> = ({
   )
 }
 
-export default TextInput
+export default TextareaInput

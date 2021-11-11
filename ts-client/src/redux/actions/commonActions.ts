@@ -6,9 +6,24 @@ import {
   STOP_LOADING_AUTH,
   SET_CURRENT_USER,
   GET_ERRORS,
-  REFRESH_ERRORS
+  REFRESH_ERRORS,
+  SET_NAVBAR_VALUES
 } from '../dispatchTypes'
 import { toast } from 'react-toastify'
+
+export const uploadExerciseIcon = () => async (dispatch: any) => {
+  console.log('upload')
+}
+
+export const setNavbarValues = (data: CommonRedux) => async (dispatch: any) => {
+  dispatch({
+    type: SET_NAVBAR_VALUES,
+    payload: {
+      navbarClick: data.navbarClick,
+      navbarText: data.navbarText
+    }
+  })
+}
 
 export const showToast = (response: any) => async (dispatch: any) => {
   if (response.status === 'success') {
